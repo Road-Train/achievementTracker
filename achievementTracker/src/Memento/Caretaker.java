@@ -8,8 +8,8 @@ public class Caretaker {
 
 	private Memento[] history;
 
-	public void undo() {
-
+	public void undo(Memento memento) {
+		achievement.restore(memento);
 	}
 
 }
