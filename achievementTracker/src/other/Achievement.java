@@ -3,35 +3,56 @@ package other;
 import Observer.FriendUser;
 
 public class Achievement {
-
-	private FriendUser[] subscribers;
-
 	private String game;
-
 	private String description;
-
 	private int progress;
-
 	private int totalProgress;
 
-	public void notifyFriends() {
-
+	public Achievement(String game, String description, int progress, int totalProgress)
+	{
+		this.game = game;
+		this.description = description;
+		this.progress = progress;
+		this.totalProgress = totalProgress;
 	}
 
-	public void subscribe(FriendUser subscriber) {
-
+	public String getGame()
+	{
+		return this.game;
 	}
 
-	public void unsubscribe(FriendUser subscriber) {
-
+	public void setGame(String game)
+	{
+		this.game = game;
 	}
 
-	public Memento.Memento save() {
-		return null;
+	public String getDescription()
+	{
+		return this.description;
 	}
 
-	public void restore(Memento.Memento memento) {
-
+	public void setDescription(String description)
+	{
+		this.description = description;
 	}
 
+	public int getProgress()
+	{
+		return this.progress;
+	}
+
+	public void setProgress(int progress)
+	{
+		this.progress = progress;
+	}
+
+	public int getTotalProgress()
+	{
+		return this.totalProgress;
+	}
+
+	public void setTotalProgress(int totalProgress)
+	{
+		this.totalProgress = totalProgress;
+	}
 }
