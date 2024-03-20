@@ -6,4 +6,9 @@ public abstract class FriendUser {
 
 	public abstract String update(String context);
 
+	public String getName()
+	{
+		return name;
+	}
+
 }
