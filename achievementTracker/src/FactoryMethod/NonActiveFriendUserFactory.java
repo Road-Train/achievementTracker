@@ -1,12 +1,13 @@
 package FactoryMethod;
 
-import Observer.FriendUser;
+import Observer.*;
 
-public class NonActiveFriendUserFactory extends FriendUserFactory {
+public class NonActiveFriendUserFactory extends FriendUserFactory
+{
 
-
-	public FriendUser createFriendUser() {
-		return null;
+	public FriendUser createFriendUser(String name)
+	{
+		return new NonActiveFriend(name);
 	}
 
 }

@@ -5,6 +5,8 @@ import Observer.FriendUser;
 
 import java.util.ArrayList;
 
+import FactoryMethod.*;
+
 public class User
 {
 	private String name;
@@ -79,4 +81,15 @@ public class User
 
 	}
 
+	public FriendUser createFriend(String type, String name)
+	{
+		switch (type) {
+			case "positive":
+				return new PositiveFriendUserFactory().createFriendUser(name);
+			case "negative":
+				return new NegativeFriendUserFactory().createFriendUser(name);
+			default:
+				return new NonActiveFriendUserFactory().createFriendUser(name);
+		}
+	}
 }
