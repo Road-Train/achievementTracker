@@ -1,19 +1,27 @@
 package Observer;
 
-public abstract class FriendUser {
+import java.io.File;
+import java.util.EventListener;
+
+public abstract class FriendUser implements EventListener
+{
 
 	private String name;
 
-	public abstract String update(String context);
-
-	FriendUser(String name)
+	public FriendUser(String name)
 	{
 		this.name = name;
 	}
 
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public abstract String update(String context);
 }

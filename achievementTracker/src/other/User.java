@@ -35,11 +35,14 @@ public class User
 		return this.achievementList;
 	}
 
+
+	// FactoryMethod
 	public void addAchievement(Achievement achievement)
 	{
 		this.achievementList.add(achievement);
 	}
 
+	// FactoryMethod
 	public void removeAchievement(Achievement achievement)
 	{
 		this.achievementList.remove(achievement);
@@ -60,15 +63,18 @@ public class User
 		this.friendList.remove(friend);
 	}
 
-
-	public void notifyFriends()
+	// Observer
+	public void notifyFriends(String context)
 	{
-
+		for (FriendUser friendUser : this.friendList)
+		{
+			friendUser.update(context);
+		}
 	}
 
 	public void editAchievement(Achievement achievement)
 	{
-
+		notifyFriends(achievement.toString());
 	}
 
 	public Memento saveMemento(Achievement achievementToSave)
