@@ -5,9 +5,9 @@ import Observer.*;
 public class NegativeFriendUserFactory extends FriendUserFactory
 {
 
-	public FriendUser createFriendUser()
+	public FriendUser createFriendUser(String name)
 	{
-		return new NegativeFriend();
+		return new NegativeFriend(name);
 	}
 
 }
