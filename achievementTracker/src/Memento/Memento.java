@@ -12,15 +12,17 @@ public class Memento {
 
 	private int totalProgress;
 
+	private LocalDateTime dateAchieved;
 	private LocalDateTime dateTime;
 
-	private Memento(String game, String description, int totalProgress)
+	public Memento(String game, String description, int totalProgress, int progress, LocalDateTime dateAchieved)
 	{
 		this.game = game;
 		this.description = description;
-		this.progress = 0;
+		this.progress = progress;
 		this.totalProgress = totalProgress;
 		this.dateTime = LocalDateTime.now();
+		this.dateAchieved = dateAchieved;
 	}
 
 	public String getGame()
@@ -71,6 +73,14 @@ public class Memento {
 	public void setDateTime(LocalDateTime dateTime)
 	{
 		this.dateTime = dateTime;
+	}
+
+	public LocalDateTime getDateAchieved() {
+		return dateAchieved;
+	}
+
+	public void setDateAchieved(LocalDateTime dateAchieved) {
+		this.dateAchieved = dateAchieved;
 	}
 
 	public void getJson() {

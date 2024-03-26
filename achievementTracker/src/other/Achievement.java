@@ -1,11 +1,16 @@
 package other;
 
+import Memento.Memento;
+
+import java.time.LocalDateTime;
+
 public class Achievement {
 
 	private String game;
 	private String description;
 	private int progress;
 	private int totalProgress;
+	private LocalDateTime dateAchieved;
 
 	public Achievement(String game, String description, int progress, int totalProgress)
 	{
@@ -13,9 +18,10 @@ public class Achievement {
 		this.description = description;
 		this.progress = progress;
 		this.totalProgress = totalProgress;
+		this.dateAchieved = LocalDateTime.now();
 	}
-	public Memento.Memento save() {
-		return null;
+	public Memento save() {
+		return new Memento(this.game, this.description, this.totalProgress, this.progress, this.dateAchieved);
 	}
 	public String getGame()
 	{
@@ -27,6 +33,14 @@ public class Achievement {
 		this.game = game;
 	}
 
+	public void restore(Memento memento)
+	{
+		this.game = memento.getGame();
+		this.description = memento.getDescription();
+		this.progress = memento.getProgress();
+		this.totalProgress = memento.getTotalProgress();
+		this.dateAchieved = memento.getDateTime();
+	}
 	public String getDescription()
 	{
 		return this.description;
@@ -55,5 +69,15 @@ public class Achievement {
 	public void setTotalProgress(int totalProgress)
 	{
 		this.totalProgress = totalProgress;
+	}
+
+	public LocalDateTime getDateAchieved()
+	{
+		return dateAchieved;
+	}
+
+	public void setDateAchieved(LocalDateTime dateAchieved)
+	{
+		this.dateAchieved = dateAchieved;
 	}
 }
