@@ -23,5 +23,5 @@ public abstract class FriendUser implements EventListener
 		this.name = name;
 	}
 
-	public abstract String update(String context);
+	public abstract void update(String context, int number);
 }

@@ -8,9 +8,24 @@ public class PositiveFriend extends FriendUser implements EventListener {
         super(name);
     }
 
-    public String update(String context)
+    public void update(String context, int number)
     {
-        return getName() + " received an update for: " + context;
+        if (context.equals("New"))
+        {
+            System.out.println(getName() + " said: Nice, you finally started that achievement!");
+        }
+        else if (context.equals("Edit"))
+        {
+            System.out.println(getName() + " said: Good luck");
+        }
+        else if (context.equals("Progress"))
+        {
+            System.out.println(getName() + " said: Nice job! Have fun with this game!");
+        }
+        else if (context.equals("Completed"))
+        {
+            System.out.println(getName() + " said: Super fast! Proud of you!");
+        }
     }
 
 }

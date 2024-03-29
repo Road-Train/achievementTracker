@@ -4,8 +4,13 @@ import Memento.Memento;
 import Observer.FriendUser;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import FactoryMethod.*;
+import Observer.NegativeFriend;
+import Observer.NonActiveFriend;
+
+import javax.imageio.plugins.tiff.TIFFDirectory;
 
 public class User
 {
@@ -40,6 +45,7 @@ public class User
 	public void addAchievement(Achievement achievement)
 	{
 		this.achievementList.add(achievement);
+		notifyFriends("New");
 	}
 
 	// FactoryMethod
@@ -66,15 +72,61 @@ public class User
 	// Observer
 	public void notifyFriends(String context)
 	{
-		for (FriendUser friendUser : this.friendList)
+		Random random = new Random();
+		int max = 10;
+		int min = 1;
+		int number = random.nextInt(max - min + 1) + min;
+
+		if (this.friendList != null && !this.friendList.isEmpty())
 		{
-			friendUser.update(context);
+			for (FriendUser friendUser : this.friendList)
+			{
+				if (friendUser instanceof NonActiveFriend)
+				{
+					friendUser.update(context, number);
+				}
+				else
+				{
+					friendUser.update(context, 0);
+				}
+			}
+		}
+		else
+		{
+			System.out.println("No friends in your friendslist to notify!");
 		}
 	}
 
-	public void editAchievement(Achievement achievement)
+	public void editAchievement(Achievement achievement, int progress)
 	{
-		notifyFriends(achievement.toString());
+		int progressAchievement = achievement.getProgress();
+		int totalProgress = achievement.getTotalProgress();
+		int newProgress = 0;
+		double procentProgress = (double) 100 / totalProgress * progressAchievement;
+
+		if (progress == 0)
+		{
+			newProgress = progressAchievement;
+		}
+		else if (progress != 0 && progress > progressAchievement)
+		{
+			newProgress = progress;
+		}
+
+		double procentProgressNew = (double) 100 / totalProgress * newProgress;
+
+		if (procentProgressNew > procentProgress && procentProgressNew < totalProgress)
+		{
+			notifyFriends("Progress");
+		}
+		else if (procentProgressNew > procentProgress && procentProgressNew == totalProgress)
+		{
+			notifyFriends("Completed");
+		}
+		else
+		{
+			notifyFriends("Edit");
+		}
 	}
 
 	public Memento saveMemento(Achievement achievementToSave)

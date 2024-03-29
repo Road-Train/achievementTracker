@@ -10,7 +10,6 @@ public class NegativeFriend extends FriendUser implements EventListener
     public NegativeFriend(String name)
     {
         super(name);
-//        this.email = email;
     }
 
     public String getEmail()
@@ -23,17 +22,23 @@ public class NegativeFriend extends FriendUser implements EventListener
         this.email = email;
     }
 
-    public String update(String context)
+    public void update(String context, int number)
     {
-        return getName() + " received an update for: " + context;
+        if (context.equals("New"))
+        {
+            System.out.println(getName() + " said: Completed this achievement last year lol");
+        }
+        else if (context.equals("Edit"))
+        {
+            System.out.println(getName() + " said: Don't care");
+        }
+        else if (context.equals("Progress"))
+        {
+            System.out.println(getName() + " said: You can do better than this right?");
+        }
+        else if (context.equals("Completed"))
+        {
+            System.out.println(getName() + " said: I completed this way faster than you...");
+        }
     }
-
-    public void update(String eventType, File file)
-    {
-        // eventType = achievementNew, achievementUpdate, achievementCustomized
-        // Someone has created a new achievement.
-        // een melding in beeld, hoe groot?
-        System.out.println("Email to " + this.email + "text" + eventType + "text" + file);
-    }
-
 }
