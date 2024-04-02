@@ -1,58 +1,33 @@
 package other;
 
 import Memento.Memento;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class JsonReader
 {
 	
 	public Memento readMementoFromJson()
 	{
-		try
+		Path filePath = Paths.get(jsonFilePicker().getPath());
+		try (FileInputStream fileIn = new FileInputStream(filePath.toFile()); ObjectInputStream objectIn = new ObjectInputStream(fileIn))
 		{
-			JsonNode jsonNode = readJsonFromFile(jsonFilePicker().getPath());
-			
-			LocalDateTime dateTime = LocalDateTime.parse(jsonNode.get("dateTime").asText());
-			String game = jsonNode.get("game").asText();
-			String description = jsonNode.get("description").asText();
-			int progress = jsonNode.get("progress").asInt();
-			LocalDateTime dateAchieved = LocalDateTime.parse(jsonNode.get("dateAchieved").asText());
-			int totalProgress = jsonNode.get("totalProgress").asInt();
-			
-			System.out.println("dateTime: " + dateTime);
-			System.out.println("game: " + game);
-			System.out.println("description: " + description);
-			System.out.println("progress: " + progress);
-			System.out.println("dateAchieved: " + dateAchieved);
-			System.out.println("totalProgress: " + totalProgress);
-			
-			Memento memento = new Memento(game, description, totalProgress, progress, dateAchieved);
-			memento.setDateTime(dateTime);
-			
-			return memento;
-			
+			return (Memento) objectIn.readObject();
 		}
-		catch (IOException e)
+		catch (Exception ex)
 		{
-			e.printStackTrace();
+			ex.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 	
-	public static JsonNode readJsonFromFile(String filePath) throws IOException
-	{
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.readTree(new File(filePath));
-	}
-	
-	public File jsonFilePicker()
+	private File jsonFilePicker()
 	{
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);

@@ -8,6 +8,7 @@ public class Achievement
 {
 	
 	private String game;
+	private String title;
 	private String description;
 	private int progress = 0;
 	private int totalProgress;
@@ -16,9 +17,10 @@ public class Achievement
 	{
 		restore(memento);
 	}
-	public Achievement(String game, String description, int totalProgress)
+	public Achievement(String game,String title, String description, int totalProgress)
 	{
 		this.game = game;
+		this.title = title;
 		this.description = description;
 		this.totalProgress = totalProgress;
 		this.dateAchieved = LocalDateTime.now();
@@ -26,7 +28,7 @@ public class Achievement
 	
 	public Memento save()
 	{
-		return new Memento(this.game, this.description, this.totalProgress, this.progress, this.dateAchieved);
+		return new Memento(this.game,this.title, this.description, this.totalProgress, this.progress, this.dateAchieved);
 	}
 	
 	public String getGame()
