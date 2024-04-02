@@ -13,8 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class JsonWriter {
-
+public class JsonWriter
+{
+	
 	public void writeMementoToJson(Memento.Memento memento)
 	{
 		Map<String, Object> data = new HashMap<>();
@@ -24,33 +25,37 @@ public class JsonWriter {
 		data.put("description", memento.getDescription());
 		data.put("dateTime", memento.getDateTime());
 		data.put("dateAchieved", memento.getDateAchieved());
-
+		
 		Path filePath = Paths.get(locationPicker().getPath() + "\\" + memento.getGame() + memento.getDateTime().toString().replace(":", "-") + ".json"); // Define the file path
-		try (Writer writer = Files.newBufferedWriter(filePath)) {
+		try (Writer writer = Files.newBufferedWriter(filePath))
+		{
 			writer.write(mapToJson(data));
 			System.out.println("JSON file created successfully!" + " at;");
 			System.out.println("File path: " + filePath.toAbsolutePath()); // Print absolute path
-		} catch (IOException ex) {
+		}
+		catch (IOException ex)
+		{
 			ex.printStackTrace();
 		}
 	}
-
-	public static String mapToJson(Map<String, Object> map) {
+	
+	public static String mapToJson(Map<String, Object> map)
+	{
 		return "{" + map.entrySet().stream()
 				.map(entry -> "\"" + entry.getKey() + "\": \"" + entry.getValue() + "\"")
 				.collect(Collectors.joining(", ")) + "}";
 	}
-
+	
 	public File locationPicker()
 	{
 		JFileChooser f = new JFileChooser();
 		f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		f.showSaveDialog(null);
-
+		
 		System.out.println(f.getCurrentDirectory());
 		System.out.println(f.getSelectedFile());
-
-		if(f.getSelectedFile() != null)
+		
+		if (f.getSelectedFile() != null)
 		{
 			return f.getSelectedFile();
 		}
@@ -59,5 +64,5 @@ public class JsonWriter {
 			return f.getCurrentDirectory();
 		}
 	}
-
+	
 }
