@@ -11,10 +11,10 @@ public class PositiveFriend extends FriendUser
 	{
 		return switch (context)
 		{
-			case "New" -> STR."\{getName()} said: Nice, you finally started that achievement!";
-			case "Edit" -> getName() + " said: Good luck";
-			case "Progress" -> getName() + " said: Nice job! Have fun with this game!";
-			case "Completed" -> getName() + " said: Super fast! Proud of you!";
+			case "New" -> "Nice, you finally started that achievement!";
+			case "Edit" -> "Good luck";
+			case "Progress" -> "Nice job! Have fun with this game!";
+			case "Completed" -> "Super fast! Proud of you!";
 			default -> null;
 		};
 	}

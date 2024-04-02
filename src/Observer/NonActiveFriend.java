@@ -26,10 +26,10 @@ public class NonActiveFriend extends FriendUser
 		{
 			return switch (context)
 			{
-				case "New" -> STR."\{getName()} said: Nice, you finally started that achievement!";
-				case "Edit" ->  STR."\{getName()} said: Good luck";
-				case "Progress" -> STR."\{getName()} said: Nice job!";
-				case "Completed" ->  STR."\{getName()} said: Super fast!";
+				case "New" -> "Nice, you finally started that achievement!";
+				case "Edit" -> "Good luck";
+				case "Progress" -> "Nice job!";
+				case "Completed" ->  "Super fast!";
 				default -> null;
 			};
 		}

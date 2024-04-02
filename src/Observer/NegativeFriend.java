@@ -24,10 +24,10 @@ public class NegativeFriend extends FriendUser
 	{
 		return switch (context)
 		{
-			case "New" -> STR."\{getName()} said: Completed this achievement last year lol";
-			case "Edit" -> STR."\{getName()} said: Don't care";
-			case "Progress" -> STR."\{getName()} said: You can do better than this right?";
-			case "Completed" -> STR."\{getName()} said: I completed this way faster than you...";
+			case "New" -> "Completed this achievement last year lol";
+			case "Edit" -> "Don't care";
+			case "Progress" -> "You can do better than this right?";
+			case "Completed" -> "I completed this way faster than you...";
 			default -> null;
 		};
 	}

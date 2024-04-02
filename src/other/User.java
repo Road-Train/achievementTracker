@@ -73,7 +73,7 @@ public class User
 			{
 				if(friendUser.update(context)!=null)
 				{
-					System.out.println(friendUser.update(context));
+					System.out.println(STR."\{friendUser.getName()} said: \{friendUser.update(context)}");
 				}
 			}
 		}
