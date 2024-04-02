@@ -20,14 +20,15 @@ public class NegativeFriend extends FriendUser
 		this.email = email;
 	}
 	
-	public void update(String context)
+	public String update(String context)
 	{
-		switch (context)
+		return switch (context)
 		{
-			case "New" -> System.out.println(getName() + " said: Completed this achievement last year lol");
-			case "Edit" -> System.out.println(getName() + " said: Don't care");
-			case "Progress" -> System.out.println(getName() + " said: You can do better than this right?");
-			case "Completed" -> System.out.println(getName() + " said: I completed this way faster than you...");
-		}
+			case "New" -> STR."\{getName()} said: Completed this achievement last year lol";
+			case "Edit" -> STR."\{getName()} said: Don't care";
+			case "Progress" -> STR."\{getName()} said: You can do better than this right?";
+			case "Completed" -> STR."\{getName()} said: I completed this way faster than you...";
+			default -> null;
+		};
 	}
 }

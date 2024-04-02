@@ -65,18 +65,17 @@ public class User
 	}
 	
 	// Observer
-	public void notifyFriends(String context)
+	private void notifyFriends(String context)
 	{
-		if (this.friendList != null && !this.friendList.isEmpty())
+		if (!this.friendList.isEmpty())
 		{
 			for (FriendUser friendUser : this.friendList)
 			{
-				friendUser.update(context);
+				if(friendUser.update(context)!=null)
+				{
+					System.out.println(friendUser.update(context));
+				}
 			}
-		}
-		else
-		{
-			System.out.println("No friends in your friendslist to notify!");
 		}
 	}
 	
@@ -91,18 +90,18 @@ public class User
 		{
 			newProgress = progressAchievement;
 		}
-		else if (progress != 0 && progress > progressAchievement)
+		else if (progress > progressAchievement)
 		{
 			newProgress = progress;
 		}
 		
-		double procentProgressNew = (double) 100 / totalProgress * newProgress;
+		double percentProgressNew = (double) 100 / totalProgress * newProgress;
 		
-		if (procentProgressNew > procentProgress && procentProgressNew < totalProgress)
+		if (percentProgressNew > procentProgress && percentProgressNew < totalProgress)
 		{
 			notifyFriends("Progress");
 		}
-		else if (procentProgressNew > procentProgress && procentProgressNew == totalProgress)
+		else if (percentProgressNew > procentProgress && percentProgressNew == totalProgress)
 		{
 			notifyFriends("Completed");
 		}
@@ -119,9 +118,7 @@ public class User
 	
 	public void restoreMemento(Memento memento)
 	{
-		Achievement achievement = new Achievement(null, null, 0, 0);
-		achievement.restore(memento);
-		
+		Achievement achievement = new Achievement(memento);
 		achievementList.add(achievement);
 	}
 	
@@ -130,22 +127,18 @@ public class User
 		JsonReader jsonReader = new JsonReader();
 		Memento memento = jsonReader.readMementoFromJson();
 		
-		Achievement achievement = new Achievement(null, null, 0, 0);
-		achievement.restore(memento);
+		Achievement achievement = new Achievement(memento);
 		
 		achievementList.add(achievement);
 	}
 	
 	public FriendUser createFriend(String type, String name)
 	{
-		switch (type)
+		return switch (type)
 		{
-			case "positive":
-				return new PositiveFriendUserFactory().createFriendUser(name);
-			case "negative":
-				return new NegativeFriendUserFactory().createFriendUser(name);
-			default:
-				return new NonActiveFriendUserFactory().createFriendUser(name);
-		}
+			case "positive" -> new PositiveFriendUserFactory().createFriendUser(name);
+			case "negative" -> new NegativeFriendUserFactory().createFriendUser(name);
+			default -> new NonActiveFriendUserFactory().createFriendUser(name);
+		};
 	}
 }

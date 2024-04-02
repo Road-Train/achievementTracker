@@ -20,5 +20,5 @@ public abstract class FriendUser
 		this.name = name;
 	}
 	
-	public abstract void update(String context);
+	public abstract String update(String context);
 }

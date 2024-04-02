@@ -9,15 +9,17 @@ public class Achievement
 	
 	private String game;
 	private String description;
-	private int progress;
+	private int progress = 0;
 	private int totalProgress;
 	private LocalDateTime dateAchieved;
-	
-	public Achievement(String game, String description, int progress, int totalProgress)
+	public Achievement(Memento memento)
+	{
+		restore(memento);
+	}
+	public Achievement(String game, String description, int totalProgress)
 	{
 		this.game = game;
 		this.description = description;
-		this.progress = progress;
 		this.totalProgress = totalProgress;
 		this.dateAchieved = LocalDateTime.now();
 	}

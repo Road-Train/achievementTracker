@@ -15,7 +15,7 @@ public class NonActiveFriend extends FriendUser
 		this.responseNumber = random.nextInt(max - min + 1) + min;
 	}
 	
-	public void update(String context)
+	public String update(String context)
 	{
 		Random random = new Random();
 		int max = 10;
@@ -24,18 +24,16 @@ public class NonActiveFriend extends FriendUser
 		
 		if (randomNumber == responseNumber)
 		{
-			switch (context)
+			return switch (context)
 			{
-				case "New" -> System.out.println(getName() + " said: Nice, you finally started that achievement!");
-				case "Edit" -> System.out.println(getName() + " said: Good luck");
-				case "Progress" -> System.out.println(getName() + " said: Nice job!");
-				case "Completed" -> System.out.println(getName() + " said: Super fast!");
-			}
+				case "New" -> STR."\{getName()} said: Nice, you finally started that achievement!";
+				case "Edit" ->  STR."\{getName()} said: Good luck";
+				case "Progress" -> STR."\{getName()} said: Nice job!";
+				case "Completed" ->  STR."\{getName()} said: Super fast!";
+				default -> null;
+			};
 		}
-		else
-		{
-			System.out.println("Friend is nonactive!");
-		}
+		return null;
 	}
 	
 }

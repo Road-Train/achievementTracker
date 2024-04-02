@@ -7,15 +7,16 @@ public class PositiveFriend extends FriendUser
 		super(name);
 	}
 	
-	public void update(String context)
+	public String update(String context)
 	{
-		switch (context)
+		return switch (context)
 		{
-			case "New" -> System.out.println(getName() + " said: Nice, you finally started that achievement!");
-			case "Edit" -> System.out.println(getName() + " said: Good luck");
-			case "Progress" -> System.out.println(getName() + " said: Nice job! Have fun with this game!");
-			case "Completed" -> System.out.println(getName() + " said: Super fast! Proud of you!");
-		}
+			case "New" -> STR."\{getName()} said: Nice, you finally started that achievement!";
+			case "Edit" -> getName() + " said: Good luck";
+			case "Progress" -> getName() + " said: Nice job! Have fun with this game!";
+			case "Completed" -> getName() + " said: Super fast! Proud of you!";
+			default -> null;
+		};
 	}
 	
 }
