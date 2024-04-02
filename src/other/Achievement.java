@@ -13,11 +13,13 @@ public class Achievement
 	private int progress = 0;
 	private int totalProgress;
 	private LocalDateTime dateAchieved;
+	
 	public Achievement(Memento memento)
 	{
 		restore(memento);
 	}
-	public Achievement(String game,String title, String description, int totalProgress)
+	
+	public Achievement(String game, String title, String description, int totalProgress)
 	{
 		this.game = game;
 		this.title = title;
@@ -28,7 +30,7 @@ public class Achievement
 	
 	public Memento save()
 	{
-		return new Memento(this.game,this.title, this.description, this.totalProgress, this.progress, this.dateAchieved);
+		return new Memento(this.game, this.title, this.description, this.totalProgress, this.progress, this.dateAchieved);
 	}
 	
 	public String getGame()
@@ -44,10 +46,21 @@ public class Achievement
 	public void restore(Memento memento)
 	{
 		this.game = memento.getGame();
+		this.title = memento.getTitle();
 		this.description = memento.getDescription();
 		this.progress = memento.getProgress();
 		this.totalProgress = memento.getTotalProgress();
 		this.dateAchieved = memento.getDateTime();
+	}
+	
+	public String getSimpleInfo()
+	{
+		return STR."\{title} (\{game})";
+	}
+	
+	public String getinfo()
+	{
+		return STR."Title: \{title}\nGame: \{game}Description: \{description}Progress: \{progress}/\{totalProgress}";
 	}
 	
 	public String getDescription()
@@ -88,5 +101,10 @@ public class Achievement
 	public void setDateAchieved(LocalDateTime dateAchieved)
 	{
 		this.dateAchieved = dateAchieved;
+	}
+	
+	public void setTitle(String title)
+	{
+		this.title = title;
 	}
 }

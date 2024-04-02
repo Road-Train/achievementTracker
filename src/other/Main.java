@@ -1,7 +1,7 @@
 package other;
 
 import Memento.Memento;
-
+import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDateTime;
 
@@ -40,7 +40,7 @@ public class Main
 		reader.readMementoFromJson();
 	}
 	
-	private static void createAchievement()
+	private static void createAchievement()//TODO implement this via the user
 	{
 		System.out.println("Please enter the game's name:");
 		System.out.print("> ");
@@ -53,15 +53,93 @@ public class Main
 		String description = scanner.nextLine();
 		System.out.println("Please enter the achievement's total Progress:");
 		System.out.print("> ");
-		int progress = Integer.parseInt(scanner.nextLine());
+		int progress = scanner.nextInt();
 		Achievement achievement = new Achievement(game,title, description, progress);
 		user.addAchievement(achievement);
 		System.out.println("Achievement created succesfully!");
 	}
 	
-	private static void editAchievement()
+	private static void editAchievement()//TODO implement this via the user
 	{
-	
+		List<Achievement> achievements = user.getAchievementList();
+		if(!achievements.isEmpty())
+		{
+			System.out.println("Input the number of the achievement you wish to edit:");
+			for (int i = 0; i < achievements.size(); i++) {
+				System.out.println(STR."\{i + 1}: \{achievements.get(i).getSimpleInfo()}");
+			}
+			int index = -1;
+			while (index<0||index> achievements.size())
+			{
+				if (scanner.hasNextInt()) {
+					index = scanner.nextInt();
+				} else {
+					System.out.println("Invalid input. Please enter a valid integer.");
+					scanner.next(); // Consume the invalid input
+				}
+			}
+			Achievement achievementToEdit = achievements.get(index-1);
+			System.out.println(achievementToEdit.getinfo());
+			System.out.println("Please input the name of the item you wish to edit. Enter 'done' to finish.");
+			String newGame = null;
+			String newTitle = null;
+			String newDescription = null;
+			int newProgress = -1;
+			while (!(scanner.nextLine().equalsIgnoreCase("done")))
+			{
+				switch (scanner.nextLine().toLowerCase())
+				{
+					case "game":
+						System.out.println("Please input the new game.");
+						newGame = scanner.nextLine();
+						break;
+					case "title":
+						System.out.println("Please input the new achievement title.");
+						newTitle = scanner.nextLine();
+						break;
+					case "description":
+						System.out.println("Please input the new description.");
+						newDescription = scanner.nextLine();
+						break;
+					case "progress":
+						System.out.println("Please input the new Progress.");
+						while (newProgress<0)
+						{
+							if (scanner.hasNextInt()) {
+								newProgress = scanner.nextInt();
+							} else {
+								System.out.println("Invalid input. Please enter a valid integer.");
+								scanner.next();
+							}
+						}
+						newProgress = index;
+						break;
+					default:
+						System.out.println("Invalid input detected.");
+				}
+			}
+			if(newGame!=null)
+			{
+				achievementToEdit.setGame(newGame);
+			}
+			if(newTitle!=null)
+			{
+				achievementToEdit.setTitle(newTitle);
+			}
+			if(newDescription!=null)
+			{
+				achievementToEdit.setDescription(newDescription);
+			}
+			if(newProgress>=0)
+			{
+				achievementToEdit.setProgress(newProgress);
+			}
+			System.out.println("Achievement edited succesfully!");
+		}
+		else
+		{
+			System.out.println("No achievements detected!");
+		}
 	}
 	
 	private static void saveAchievement()

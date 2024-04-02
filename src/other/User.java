@@ -3,21 +3,21 @@ package other;
 import Memento.Memento;
 import Observer.FriendUser;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import FactoryMethod.*;
 
 public class User
 {
-	private final ArrayList<Achievement> achievementList;
-	private final ArrayList<FriendUser> friendList;
+	private final LinkedList<Achievement> achievementList;
+	private final LinkedList<FriendUser> friendList;
 	private String name;
 	
 	public User(String name)
 	{
 		this.name = name;
-		this.achievementList = new ArrayList<>();
-		this.friendList = new ArrayList<>();
+		this.achievementList = new LinkedList<>();
+		this.friendList = new LinkedList<>();
 	}
 	
 	public String getName()
@@ -30,7 +30,7 @@ public class User
 		this.name = name;
 	}
 	
-	public ArrayList<Achievement> getAchievementList()
+	public LinkedList<Achievement> getAchievementList()
 	{
 		return this.achievementList;
 	}
@@ -49,7 +49,7 @@ public class User
 		this.achievementList.remove(achievement);
 	}
 	
-	public ArrayList<FriendUser> getFriendList()
+	public LinkedList<FriendUser> getFriendList()
 	{
 		return this.friendList;
 	}
@@ -84,7 +84,7 @@ public class User
 		int progressAchievement = achievement.getProgress();
 		int totalProgress = achievement.getTotalProgress();
 		int newProgress = 0;
-		double procentProgress = (double) 100 / totalProgress * progressAchievement;
+		double percentProgress = (double) 100 / totalProgress * progressAchievement;
 		
 		if (progress == 0)
 		{
@@ -97,11 +97,11 @@ public class User
 		
 		double percentProgressNew = (double) 100 / totalProgress * newProgress;
 		
-		if (percentProgressNew > procentProgress && percentProgressNew < totalProgress)
+		if (percentProgressNew > percentProgress && percentProgressNew < totalProgress)
 		{
 			notifyFriends("Progress");
 		}
-		else if (percentProgressNew > procentProgress && percentProgressNew == totalProgress)
+		else if (percentProgressNew > percentProgress && percentProgressNew == totalProgress)
 		{
 			notifyFriends("Completed");
 		}
