@@ -84,6 +84,17 @@ public class User
 		achievementList.add(achievement);;
 	}
 
+	public void restoreMementoFromJson()
+	{
+		JsonReader jsonReader = new JsonReader();
+		Memento memento = jsonReader.readMementoFromJson();
+
+		Achievement achievement = new Achievement(null,null,0,0);
+		achievement.restore(memento);
+
+		achievementList.add(achievement);;
+	}
+
 	public FriendUser createFriend(String type, String name)
 	{
 		switch (type) {

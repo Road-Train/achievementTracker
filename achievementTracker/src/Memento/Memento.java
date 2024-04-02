@@ -1,5 +1,7 @@
 package Memento;
 
+import other.JsonWriter;
+
 import java.time.LocalDateTime;
 
 public class Memento {
@@ -83,8 +85,10 @@ public class Memento {
 		this.dateAchieved = dateAchieved;
 	}
 
-	public void getJson() {
-
+	public void getJson()
+	{
+		JsonWriter jsonWriter = new JsonWriter();
+		jsonWriter.writeMementoToJson(this);
 	}
 
 	public void setJson() {

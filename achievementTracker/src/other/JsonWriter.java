@@ -1,6 +1,8 @@
 package other;
 
+import javax.swing.*;
 import javax.xml.stream.Location;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -23,7 +25,7 @@ public class JsonWriter {
 		data.put("dateTime", memento.getDateTime());
 		data.put("dateAchieved", memento.getDateAchieved());
 
-		Path filePath = Paths.get(memento.getGame() + memento.getDateTime().toString().replace(":", "-") + ".json"); // Define the file path
+		Path filePath = Paths.get(locationPicker().getPath() + "\\" + memento.getGame() + memento.getDateTime().toString().replace(":", "-") + ".json"); // Define the file path
 		try (Writer writer = Files.newBufferedWriter(filePath)) {
 			writer.write(mapToJson(data));
 			System.out.println("JSON file created successfully!" + " at;");
@@ -39,8 +41,23 @@ public class JsonWriter {
 				.collect(Collectors.joining(", ")) + "}";
 	}
 
-	public Location locationPicker() {
-		return null;
+	public File locationPicker()
+	{
+		JFileChooser f = new JFileChooser();
+		f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		f.showSaveDialog(null);
+
+		System.out.println(f.getCurrentDirectory());
+		System.out.println(f.getSelectedFile());
+
+		if(f.getSelectedFile() != null)
+		{
+			return f.getSelectedFile();
+		}
+		else
+		{
+			return f.getCurrentDirectory();
+		}
 	}
 
 }

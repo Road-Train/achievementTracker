@@ -12,7 +12,10 @@ public class Main
             Memento memento = new Memento("fortnite", "Get 10 kills before reaching 10 players remaining", 10, 3,LocalDateTime.of(2020, 2,23, 11, 54));
 
             JsonWriter writer = new JsonWriter();
-            writer.writeMementoToJson(memento);
+           // writer.writeMementoToJson(memento);
+
+            JsonReader reader = new JsonReader();
+            reader.readMementoFromJson();
 
     }
 }
