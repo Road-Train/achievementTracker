@@ -2,6 +2,8 @@ package Memento;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.stream.IntStream;
 
 public class Achievement
 {
@@ -33,6 +35,13 @@ public class Achievement
 		caretaker.addMemento(new Memento(this.game, this.title, this.description, this.totalProgress, this.progress, this.dateAchieved));
 	}
 	
+	public int getHistory()
+	{
+		LinkedList<Memento> history = caretaker.fetchHistory();
+		IntStream.range(0, history.size()).mapToObj(i -> STR."\{i + 1}: \{history.get(i).getState()}").forEach(System.out::println);
+		return history.size();
+	}
+	
 	public String getGame()
 	{
 		return this.game;
@@ -59,7 +68,7 @@ public class Achievement
 	
 	public String getSimpleInfo()
 	{
-		return STR."\{title} (\{game})";
+		return STR."\{title} - (\{game})";
 	}
 	
 	public String getinfo()
@@ -134,7 +143,12 @@ public class Achievement
 			this.dateAchieved = dateAchieved;
 		}
 		
-		public String getFilePath()
+		String getState()
+		{
+			return STR."\{dateTime} - \{description} - \{progress}/\{totalProgress}";
+		}
+		
+		String getFilePath()
 		{
 			return STR."\{game}\{dateTime.toString().replace(":", "-")}";
 		}

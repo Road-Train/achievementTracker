@@ -23,7 +23,10 @@ public class Caretaker
 	{
 		history.add(memento);
 	}
-	
+	LinkedList<Achievement.Memento> fetchHistory()
+	{
+		return history;
+	}
 	void removeMemento(Achievement.Memento memento)
 	{
 		history.remove(memento);

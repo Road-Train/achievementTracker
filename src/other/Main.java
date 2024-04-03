@@ -154,6 +154,7 @@ public class Main
 		if(!(achievements.isEmpty()))
 		{
 			System.out.println("Input the number of the achievement you wish to save:");
+			System.out.print("> ");
 			Achievement achievement = achievements.get(selectAchievementFromList(achievements)-1);
 			achievement.save();
 		}
@@ -166,7 +167,21 @@ public class Main
 	
 	private static void restoreAchievement()
 	{
-	
+		List<Achievement> achievements = user.getAchievementList();
+		if(!(achievements.isEmpty()))
+		{
+			System.out.println("Input the number of the achievement for which you want to restore:");
+			System.out.print("> ");
+			Achievement achievement = achievements.get(selectAchievementFromList(achievements)-1);
+			System.out.println("Input the number corresponding to the achievement you wish to restore.");
+			int amountOfMementos = achievement.getHistory();
+			achievement.restore(amountOfMementos-scanner.nextInt());
+		}
+		else
+		{
+			System.out.println("No achievements detected!");
+		}
+		scanner.nextLine();
 	}
 	
 	private static void displayCommands(boolean includeFirstLine)
