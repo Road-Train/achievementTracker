@@ -1,6 +1,4 @@
-package other;
-
-import Memento.Memento;
+package Memento;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -13,12 +11,12 @@ import java.nio.file.Paths;
 public class JsonReader
 {
 	
-	public Memento readMementoFromJson()
+	public Achievement.Memento readMementoFromJson()
 	{
 		Path filePath = Paths.get(jsonFilePicker().getPath());
 		try (FileInputStream fileIn = new FileInputStream(filePath.toFile()); ObjectInputStream objectIn = new ObjectInputStream(fileIn))
 		{
-			return (Memento) objectIn.readObject();
+			return (Achievement.Memento) objectIn.readObject();
 		}
 		catch (Exception ex)
 		{

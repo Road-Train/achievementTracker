@@ -1,6 +1,6 @@
 package Memento;
 
-import other.Achievement;
+import Memento.Achievement;
 
 import java.util.ArrayList;
 
@@ -9,9 +9,9 @@ public class Caretaker
 	
 	private final Achievement achievement;
 	
-	private ArrayList<Memento> history;
+	private ArrayList<Achievement.Memento> history;
 	
-	public void undo(Memento memento)
+	public void undo(Achievement.Memento memento)
 	{
 		achievement.restore(memento);
 	}
@@ -21,12 +21,12 @@ public class Caretaker
 		this.achievement = achievement;
 	}
 	
-	public void addMemento(Memento memento)
+	public void addMemento(Achievement.Memento memento)
 	{
 		history.add(memento);
 	}
 	
-	public void removeMemento(Memento memento)
+	public void removeMemento(Achievement.Memento memento)
 	{
 		history.remove(memento);
 	}

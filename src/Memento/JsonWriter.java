@@ -1,4 +1,4 @@
-package other;
+package Memento;
 
 import javax.swing.*;
 import java.io.*;
@@ -7,9 +7,9 @@ import java.nio.file.Paths;
 
 public class JsonWriter
 {
-	public void writeMementoToJson(Memento.Memento memento)
+	public void writeMementoToJson(Achievement.Memento memento)
 	{
-		Path filePath = Paths.get(STR."\{locationPicker().getPath()}\\\{memento.getGame()}\{memento.getDateTime().toString().replace(":", "-")}.json"); // Define the file path
+		Path filePath = Paths.get(STR."\{locationPicker().getPath()}\\\{memento.getFilePath()}.json"); // Define the file path
 		try (FileOutputStream fileOut = new FileOutputStream(filePath.toFile()); ObjectOutputStream objectOut = new ObjectOutputStream(fileOut))
 		{
 			objectOut.writeObject(memento);

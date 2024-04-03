@@ -1,6 +1,7 @@
 package other;
 
-import Memento.Memento;
+import Memento.Achievement;
+import Memento.JsonReader;
 import Observer.FriendUser;
 
 import java.util.LinkedList;
@@ -111,12 +112,12 @@ public class User
 		}
 	}
 	
-	public Memento saveMemento(Achievement achievementToSave)
+	public Achievement.Memento saveMemento(Achievement achievementToSave)
 	{
 		return achievementToSave.save();
 	}
 	
-	public void restoreMemento(Memento memento)
+	public void restoreMemento(Achievement.Memento memento)
 	{
 		Achievement achievement = new Achievement(memento);
 		achievementList.add(achievement);
@@ -125,7 +126,7 @@ public class User
 	public void restoreMementoFromJson()
 	{
 		JsonReader jsonReader = new JsonReader();
-		Memento memento = jsonReader.readMementoFromJson();
+		Achievement.Memento memento = jsonReader.readMementoFromJson();
 		
 		Achievement achievement = new Achievement(memento);
 		

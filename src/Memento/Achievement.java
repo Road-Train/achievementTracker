@@ -1,7 +1,6 @@
-package other;
+package Memento;
 
-import Memento.Memento;
-
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Achievement
@@ -45,12 +44,12 @@ public class Achievement
 	
 	public void restore(Memento memento)
 	{
-		this.game = memento.getGame();
-		this.title = memento.getTitle();
-		this.description = memento.getDescription();
-		this.progress = memento.getProgress();
-		this.totalProgress = memento.getTotalProgress();
-		this.dateAchieved = memento.getDateTime();
+		this.game = memento.game;
+		this.title = memento.title;
+		this.description = memento.description;
+		this.progress = memento.progress;
+		this.totalProgress = memento.totalProgress;
+		this.dateAchieved = memento.dateTime;
 	}
 	
 	public String getSimpleInfo()
@@ -106,5 +105,44 @@ public class Achievement
 	public void setTitle(String title)
 	{
 		this.title = title;
+	}
+	
+	class Memento implements Serializable
+	{
+		
+		private final String game;
+		private final String title;
+		private final String description;
+		private final int progress;
+		private final int totalProgress;
+		private final LocalDateTime dateAchieved;
+		private final LocalDateTime dateTime;
+		
+		private Memento(String game, String title, String description, int totalProgress, int progress, LocalDateTime dateAchieved)
+		{
+			this.game = game;
+			this.title = title;
+			this.description = description;
+			this.progress = progress;
+			this.totalProgress = totalProgress;
+			this.dateTime = LocalDateTime.now();
+			this.dateAchieved = dateAchieved;
+		}
+		
+		public String getFilePath()
+		{
+			return STR."\{game}\{dateTime.toString().replace(":", "-")}";
+		}
+		
+		public void getJson()
+		{
+			JsonWriter jsonWriter = new JsonWriter();
+			jsonWriter.writeMementoToJson(this);
+		}
+		
+		public void setJson()
+		{
+		
+		}
 	}
 }
