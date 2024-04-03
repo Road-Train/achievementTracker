@@ -12,6 +12,7 @@ public class Achievement
 	private int progress = 0;
 	private int totalProgress;
 	private LocalDateTime dateAchieved;
+	private Caretaker caretaker;
 	
 	public Achievement(Memento memento)
 	{
@@ -27,9 +28,9 @@ public class Achievement
 		this.dateAchieved = LocalDateTime.now();
 	}
 	
-	public Memento save()
+	public void save()
 	{
-		return new Memento(this.game, this.title, this.description, this.totalProgress, this.progress, this.dateAchieved);
+		caretaker.addMemento(new Memento(this.game, this.title, this.description, this.totalProgress, this.progress, this.dateAchieved));
 	}
 	
 	public String getGame()
@@ -42,7 +43,11 @@ public class Achievement
 		this.game = game;
 	}
 	
-	public void restore(Memento memento)
+	public void restore(int index)
+	{
+		Memento memento = caretaker.undo(index);
+	}
+	private void restore(Memento memento)
 	{
 		this.game = memento.game;
 		this.title = memento.title;

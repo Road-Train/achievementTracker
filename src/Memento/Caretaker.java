@@ -2,31 +2,29 @@ package Memento;
 
 import Memento.Achievement;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Caretaker
 {
 	
-	private final Achievement achievement;
+	private final LinkedList<Achievement.Memento> history;
 	
-	private ArrayList<Achievement.Memento> history;
+
 	
-	public void undo(Achievement.Memento memento)
+	public Caretaker()
 	{
-		achievement.restore(memento);
+		this.history = new LinkedList<>();
 	}
-	
-	public Caretaker(Achievement achievement)
+	Achievement.Memento undo(int index)
 	{
-		this.achievement = achievement;
+		return history.get(index);
 	}
-	
-	public void addMemento(Achievement.Memento memento)
+	void addMemento(Achievement.Memento memento)
 	{
 		history.add(memento);
 	}
 	
-	public void removeMemento(Achievement.Memento memento)
+	void removeMemento(Achievement.Memento memento)
 	{
 		history.remove(memento);
 	}

@@ -112,24 +112,20 @@ public class User
 		}
 	}
 	
-	public Achievement.Memento saveMemento(Achievement achievementToSave)
+	public void saveMemento(Achievement achievementToSave)
 	{
-		return achievementToSave.save();
+		achievementToSave.save();
 	}
 	
-	public void restoreMemento(Achievement.Memento memento)
+	public void restoreMemento(Achievement achievement, int index)
 	{
-		Achievement achievement = new Achievement(memento);
-		achievementList.add(achievement);
+		achievement.restore(index);
 	}
 	
-	public void restoreMementoFromJson()
+	public void importAchievement()
 	{
 		JsonReader jsonReader = new JsonReader();
-		Achievement.Memento memento = jsonReader.readMementoFromJson();
-		
-		Achievement achievement = new Achievement(memento);
-		
+		Achievement achievement = new Achievement(jsonReader.readMementoFromJson());
 		achievementList.add(achievement);
 	}
 	
