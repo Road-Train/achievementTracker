@@ -1,9 +1,12 @@
 package other;
 
+import FactoryMethod.*;
 import Memento.*;
+import Observer.FriendUser;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 
@@ -11,11 +14,13 @@ public class Main
 {
 	private static final Scanner scanner = new Scanner(System.in);
 	private static final User user = new User("Gerjan");
-	private static final JsonReader reader = new JsonReader();
-	private static final JsonWriter writer = new JsonWriter();
+	private final static PositiveFriendUserFactory positiveFriendUserFactory = new PositiveFriendUserFactory();
+	private final static NegativeFriendUserFactory negativeFriendUserFactory = new NegativeFriendUserFactory();
+	private final static NonActiveFriendUserFactory nonActiveFriendUserFactory = new NonActiveFriendUserFactory();
 	
 	public static void main(String[] args)
 	{
+		initialize();
 		System.out.println("Achievement Tracker 1.0");
 		System.out.println("Please use one of the following commands (case insensitive):");
 		displayCommands(false);
@@ -32,6 +37,7 @@ public class Main
 				case "saveachievement" -> saveAchievement();
 				case "restoreachievement" -> restoreAchievement();
 				case "updateachievement" -> updateAchievement();
+				case "viewfriends" -> showFriends();
 				case "help" -> displayCommands(true);
 				case "exit" -> System.out.println("Exiting program.");
 				default -> System.out.println("Unrecognized command. Use 'help' for all available commands.");
@@ -39,7 +45,30 @@ public class Main
 		} while (!command.equalsIgnoreCase("exit"));
 		System.exit(0);
 	}
-	
+	private static void initialize()
+	{
+		LinkedList<String> names = new LinkedList<>();
+		names.add("Bart");
+		names.add("Peter");
+		names.add("Esmee");
+		names.add("Gerjan");
+		names.add("Henk");
+		names.add("Jan");
+		names.add("Klaas");
+		for(String name : names)
+		{
+			Random rng = new Random();
+			int number = rng.nextInt(3)+1;
+			FriendUser friend = switch (number)
+			{
+				case 1 -> positiveFriendUserFactory.createFriendUser(name);
+				case 2 -> negativeFriendUserFactory.createFriendUser(name);
+				case 3 -> nonActiveFriendUserFactory.createFriendUser(name);
+				default -> throw new IllegalStateException(STR."Unexpected value: \{number}");
+			};
+			user.addFriend(friend);
+		}
+	}
 	private static void updateAchievement()
 	{
 		LinkedList<Achievement> achievements = user.getAchievementList();
@@ -74,8 +103,7 @@ public class Main
 		System.out.println("Please enter the achievement's total Progress:");
 		System.out.print("> ");
 		int progress = scanner.nextInt();
-		Achievement achievement = new Achievement(game,title, description, progress);
-		user.addAchievement(achievement);
+		user.addAchievement(game,title, description, progress);
 		System.out.println("Achievement created succesfully!");
 		scanner.nextLine();
 	}
@@ -173,7 +201,7 @@ public class Main
 			System.out.println("Input the number of the achievement you wish to save:");
 			System.out.print("> ");
 			Achievement achievement = achievements.get(selectAchievementFromList(achievements)-1);
-			System.out.println(achievement.save());
+			user.saveAchievement(achievement);
 		}
 		else
 		{
@@ -190,11 +218,18 @@ public class Main
 			System.out.println("Input the number of the achievement for which you want to restore:");
 			System.out.print("> ");
 			Achievement achievement = achievements.get(selectAchievementFromList(achievements)-1);
-			System.out.println("Input the number corresponding to the achievement you wish to restore.");
-			System.out.print("> ");
-			int amountOfMementos = achievement.getHistory();
-			achievement.restore(amountOfMementos-scanner.nextInt());
-			System.out.println("Achievement restored.");
+			if(achievement.getHistory()!=0)
+			{
+				System.out.println("Input the number corresponding to the achievement you wish to restore.");
+				System.out.print("> ");
+				int amountOfMementos = achievement.getHistory();
+				user.restoreMemento(achievement,amountOfMementos-scanner.nextInt());
+				System.out.println("Achievement restored.");
+			}
+			else
+			{
+				System.out.println("This achievement does not have any previously saved versions.");
+			}
 		}
 		else
 		{
@@ -214,7 +249,15 @@ public class Main
 		System.out.println("UpdateAchievement -> Update your progress on an achievement.");
 		System.out.println("SaveAchievement -> Saves an achievement as a JSON file.");
 		System.out.println("RestoreAchievement -> Restores an achievement.");
+		System.out.println("ViewFriends -> Shows you your friend list.");
 		System.out.println("Help -> Displays this dialog.");
 		System.out.println("Exit -> Terminates the program. Changes will not be saved.");
+	}
+	private static void showFriends()
+	{
+		for(FriendUser friend : user.getFriendList())
+		{
+			System.out.println(STR."\{friend.getName()}(\{friend.getClass().getSimpleName()})");
+		}
 	}
 }

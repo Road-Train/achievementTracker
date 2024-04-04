@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 public class JsonWriter
 {
-	public void writeMementoToJson(Achievement.Memento memento)
+	static void writeMementoToJson(Achievement.Memento memento)
 	{
 		Path filePath = Paths.get(STR."\{locationPicker().getPath()}\\\{memento.getFilePath()}.json"); // Define the file path
 		try (FileOutputStream fileOut = new FileOutputStream(filePath.toFile()); ObjectOutputStream objectOut = new ObjectOutputStream(fileOut))
@@ -22,7 +22,7 @@ public class JsonWriter
 		}
 	}
 	
-	private File locationPicker()
+	private static File locationPicker()
 	{
 		JFileChooser f = new JFileChooser();
 		f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

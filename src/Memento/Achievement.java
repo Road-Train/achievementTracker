@@ -16,7 +16,7 @@ public class Achievement
 	private LocalDateTime dateAchieved;
 	private static final Caretaker caretaker = new Caretaker();
 	
-	public Achievement(Memento memento)
+	private Achievement(Memento memento)
 	{
 		restore(memento);
 	}
@@ -28,6 +28,10 @@ public class Achievement
 		this.description = description;
 		this.totalProgress = totalProgress;
 		this.dateAchieved = LocalDateTime.now();
+	}
+	public static Achievement importAchievement()
+	{
+		return new Achievement(Memento.deserialize());
 	}
 	
 	public String save()
@@ -56,6 +60,7 @@ public class Achievement
 	public void restore(int index)
 	{
 		Memento memento = caretaker.undo(index);
+		restore(memento);
 	}
 	private void restore(Memento memento)
 	{
@@ -64,7 +69,7 @@ public class Achievement
 		this.description = memento.description;
 		this.progress = memento.progress;
 		this.totalProgress = memento.totalProgress;
-		this.dateAchieved = memento.dateTime;
+		this.dateAchieved = memento.dateAchieved;
 	}
 	
 	public String getSimpleInfo()
@@ -135,7 +140,8 @@ public class Achievement
 		this.title = title;
 	}
 	
-	class Memento implements Serializable
+	
+	static class Memento implements Serializable
 	{
 		
 		private final String game;
@@ -144,7 +150,7 @@ public class Achievement
 		private final int progress;
 		private final int totalProgress;
 		private final LocalDateTime dateAchieved;
-		private final LocalDateTime dateTime;
+		private final LocalDateTime dateCreated;
 		
 		private Memento(String game, String title, String description, int totalProgress, int progress, LocalDateTime dateAchieved)
 		{
@@ -153,29 +159,32 @@ public class Achievement
 			this.description = description;
 			this.progress = progress;
 			this.totalProgress = totalProgress;
-			this.dateTime = LocalDateTime.now();
+			this.dateCreated = LocalDateTime.now();
 			this.dateAchieved = dateAchieved;
 		}
 		
 		String getState()
 		{
-			return STR."\{dateTime} - \{description} - \{progress}/\{totalProgress}";
+			String output = STR."\{dateCreated} - \{description} - \{progress}/\{totalProgress}";
+			if(dateAchieved!=null)
+			{
+				output+= STR." - \{dateAchieved}";
+			}
+			return output;
 		}
 		
 		String getFilePath()
 		{
-			return STR."\{game}\{dateTime.toString().replace(":", "-")}";
+			return STR."\{game}\{dateCreated.toString().replace(":", "-")}";
 		}
 		
-		public void getJson()
+		private void serialize()
 		{
-			JsonWriter jsonWriter = new JsonWriter();
-			jsonWriter.writeMementoToJson(this);
+			JsonWriter.writeMementoToJson(this);
 		}
-		
-		public void setJson()
+		private static Memento deserialize()
 		{
-		
+			return JsonReader.readMementoFromJson();
 		}
 	}
 }

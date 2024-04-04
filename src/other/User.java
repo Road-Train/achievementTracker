@@ -1,13 +1,10 @@
 package other;
 
 import Memento.Achievement;
-import Memento.JsonReader;
 import Observer.Context;
 import Observer.FriendUser;
 
 import java.util.LinkedList;
-
-import FactoryMethod.*;
 
 public class User
 {
@@ -39,9 +36,9 @@ public class User
 	
 	
 	// FactoryMethod
-	public void addAchievement(Achievement achievement)
+	public void addAchievement(String game, String title, String description, int progress)
 	{
-		this.achievementList.add(achievement);
+		this.achievementList.add(new Achievement(game,title,description,progress));
 		notifyFriends(Context.NEW);
 	}
 	
@@ -123,9 +120,9 @@ public class User
 		}
 	}
 	
-	public void saveMemento(Achievement achievementToSave)
+	public void saveAchievement(Achievement achievementToSave)
 	{
-		achievementToSave.save();
+		System.out.println(achievementToSave.save());
 	}
 	
 	public void restoreMemento(Achievement achievement, int index)
@@ -135,18 +132,7 @@ public class User
 	
 	public void importAchievement()
 	{
-		JsonReader jsonReader = new JsonReader();
-		Achievement achievement = new Achievement(jsonReader.readMementoFromJson());
+		Achievement achievement = Achievement.importAchievement();
 		achievementList.add(achievement);
-	}
-	
-	public FriendUser createFriend(String type, String name)
-	{
-		return switch (type)
-		{
-			case "positive" -> new PositiveFriendUserFactory().createFriendUser(name);
-			case "negative" -> new NegativeFriendUserFactory().createFriendUser(name);
-			default -> new NonActiveFriendUserFactory().createFriendUser(name);
-		};
 	}
 }

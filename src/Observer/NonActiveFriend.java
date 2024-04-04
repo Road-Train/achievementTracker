@@ -32,7 +32,10 @@ public class NonActiveFriend extends FriendUser
 				case COMPLETED ->  "Super fast!";
 			};
 		}
-		return null;
+		else
+		{
+			return null;
+		}
 	}
 	
 }
