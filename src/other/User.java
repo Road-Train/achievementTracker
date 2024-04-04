@@ -2,6 +2,7 @@ package other;
 
 import Memento.Achievement;
 import Memento.JsonReader;
+import Observer.Context;
 import Observer.FriendUser;
 
 import java.util.LinkedList;
@@ -41,7 +42,7 @@ public class User
 	public void addAchievement(Achievement achievement)
 	{
 		this.achievementList.add(achievement);
-		notifyFriends("New");
+		notifyFriends(Context.NEW);
 	}
 	
 	// FactoryMethod
@@ -66,7 +67,7 @@ public class User
 	}
 	
 	// Observer
-	private void notifyFriends(String context)
+	private void notifyFriends(Context context)
 	{
 		if (!this.friendList.isEmpty())
 		{
@@ -79,8 +80,18 @@ public class User
 			}
 		}
 	}
-	
-	public void editAchievement(Achievement achievement, int progress)
+	public void editAchievement(Achievement achievement,String newGame, String newTitle, String newDescription, int newTotalProgress)
+	{
+		achievement.setGame(newGame);
+		achievement.setTitle(newTitle);
+		achievement.setDescription(newDescription);
+		notifyFriends(Context.EDIT);
+		if(achievement.setTotalProgress(newTotalProgress))
+		{
+			notifyFriends(Context.COMPLETED);
+		}
+	}
+	public void updateProgress(Achievement achievement, int progress)
 	{
 		int progressAchievement = achievement.getProgress();
 		int totalProgress = achievement.getTotalProgress();
@@ -100,15 +111,15 @@ public class User
 		
 		if (percentProgressNew > percentProgress && percentProgressNew < totalProgress)
 		{
-			notifyFriends("Progress");
+			notifyFriends(Context.PROGRESS);
 		}
 		else if (percentProgressNew > percentProgress && percentProgressNew == totalProgress)
 		{
-			notifyFriends("Completed");
+			notifyFriends(Context.COMPLETED);
 		}
 		else
 		{
-			notifyFriends("Edit");
+			notifyFriends(Context.EDIT);
 		}
 	}
 	

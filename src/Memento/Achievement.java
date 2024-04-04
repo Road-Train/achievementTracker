@@ -14,7 +14,7 @@ public class Achievement
 	private int progress = 0;
 	private int totalProgress;
 	private LocalDateTime dateAchieved;
-	private Caretaker caretaker;
+	private static final Caretaker caretaker = new Caretaker();
 	
 	public Achievement(Memento memento)
 	{
@@ -30,9 +30,10 @@ public class Achievement
 		this.dateAchieved = LocalDateTime.now();
 	}
 	
-	public void save()
+	public String save()
 	{
 		caretaker.addMemento(new Memento(this.game, this.title, this.description, this.totalProgress, this.progress, this.dateAchieved));
+		return STR."Achievement saved at: \{LocalDateTime.now()}";
 	}
 	
 	public int getHistory()
@@ -73,7 +74,7 @@ public class Achievement
 	
 	public String getinfo()
 	{
-		return STR."Title: \{title}\nGame: \{game}Description: \{description}Progress: \{progress}/\{totalProgress}";
+		return STR."Title: \{title}\nGame: \{game}\nDescription: \{description}\nProgress: \{progress}/\{totalProgress}";
 	}
 	
 	public String getDescription()
@@ -101,9 +102,17 @@ public class Achievement
 		return this.totalProgress;
 	}
 	
-	public void setTotalProgress(int totalProgress)
+	public boolean setTotalProgress(int totalProgress)
 	{
+		
 		this.totalProgress = totalProgress;
+		if(totalProgress<progress)
+		{
+			progress = totalProgress;
+			System.out.println("New total Progress is lower than achieved progress: Progress set to total Progress.");
+			return true;
+		}
+		return false;
 	}
 	
 	public LocalDateTime getDateAchieved()
@@ -114,6 +123,11 @@ public class Achievement
 	public void setDateAchieved(LocalDateTime dateAchieved)
 	{
 		this.dateAchieved = dateAchieved;
+	}
+	
+	public String getTitle()
+	{
+		return title;
 	}
 	
 	public void setTitle(String title)

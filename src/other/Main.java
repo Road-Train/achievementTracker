@@ -48,13 +48,16 @@ public class Main
 			System.out.println("Input the number of the achievement you wish to update:");
 			Achievement achievement = achievements.get(selectAchievementFromList(achievements)-1);
 			System.out.println("Please specify how much progress has been made towards completion.");
-			user.editAchievement(achievement, scanner.nextInt());
+			System.out.print("> ");
+			int progress = scanner.nextInt();
+			scanner.nextLine();
+			user.updateProgress(achievement, progress);
+			System.out.println("Progress updated.");
 		}
 		else
 		{
 			System.out.println("No achievements detected!");
 		}
-		scanner.nextLine();
 	}
 	
 	private static void createAchievement()
@@ -77,7 +80,7 @@ public class Main
 		scanner.nextLine();
 	}
 	
-	private static void editAchievement()//TODO implement this via the user
+	private static void editAchievement()
 	{
 		List<Achievement> achievements = user.getAchievementList();
 		if(!achievements.isEmpty())
@@ -85,44 +88,56 @@ public class Main
 			System.out.println("Input the number of the achievement you wish to edit:");
 			Achievement achievementToEdit = achievements.get(selectAchievementFromList(achievements)-1);
 			System.out.println(achievementToEdit.getinfo());
-			System.out.println("Please input the name of the item you wish to edit. Enter 'done' to finish.");
-			String newGame = null;
-			String newTitle = null;
-			String newDescription = null;
+			System.out.println("Please input the name of the item you wish to edit, to edit total progress use 'totalProgress'. Enter 'done' to finish.");
+			String newGame = achievementToEdit.getGame();
+			String newTitle = achievementToEdit.getTitle();
+			String newDescription = achievementToEdit.getDescription();
+			int newTotalProgress = achievementToEdit.getTotalProgress();
+			boolean madeEdit = false;
 			while (!(scanner.nextLine().equalsIgnoreCase("done")))
 			{
+				if(madeEdit)
+				{
+					System.out.println("Preview:");
+					System.out.println(STR."Title: \{newTitle}\nGame: \{newGame}\nDescription: \{newDescription}\nProgress: \{achievementToEdit.getProgress()}/\{newTotalProgress}");
+				}
+				madeEdit = false;
+				System.out.println("> ");
 				switch (scanner.nextLine().toLowerCase())
 				{
 					case "game":
 						System.out.println("Please input the new game.");
 						newGame = scanner.nextLine();
+						madeEdit = true;
 						break;
 					case "title":
 						System.out.println("Please input the new achievement title.");
 						newTitle = scanner.nextLine();
+						madeEdit = true;
 						break;
 					case "description":
 						System.out.println("Please input the new description.");
 						newDescription = scanner.nextLine();
+						madeEdit = true;
 						break;
+					case "progress":
+						System.out.println("Please use the updateAchievement functionality to update progress, this function is to edit the Achievement's data.");
+						break;
+					case "totalprogress":
+						System.out.println("Please input the new total Progress required for completion.");
+						newTotalProgress = scanner.nextInt();
+						if(newTotalProgress<0)
+						{
+							System.out.println("Negative input detected: Converting to positive.");
+							newTotalProgress*=-1;
+						}
 					case "done":
 						break;
 					default:
 						System.out.println("Invalid input detected.");
 				}
 			}
-			if(newGame!=null)
-			{
-				achievementToEdit.setGame(newGame);
-			}
-			if(newTitle!=null)
-			{
-				achievementToEdit.setTitle(newTitle);
-			}
-			if(newDescription!=null)
-			{
-				achievementToEdit.setDescription(newDescription);
-			}
+			user.editAchievement(achievementToEdit,newGame,newTitle,newDescription,newTotalProgress);
 			System.out.println("Achievement edited succesfully!");
 		}
 		else
@@ -135,6 +150,7 @@ public class Main
 	private static int selectAchievementFromList(List<Achievement> achievements)
 	{
 		IntStream.range(0, achievements.size()).mapToObj(i -> STR."\{i + 1}: \{achievements.get(i).getSimpleInfo()}").forEach(System.out::println);
+		System.out.print("> ");
 		int index = -1;
 		while (index<0||index> achievements.size())
 		{
@@ -145,6 +161,7 @@ public class Main
 				scanner.next(); // Consume the invalid input
 			}
 		}
+		scanner.nextLine();
 		return index;
 	}
 	
@@ -156,7 +173,7 @@ public class Main
 			System.out.println("Input the number of the achievement you wish to save:");
 			System.out.print("> ");
 			Achievement achievement = achievements.get(selectAchievementFromList(achievements)-1);
-			achievement.save();
+			System.out.println(achievement.save());
 		}
 		else
 		{
@@ -174,8 +191,10 @@ public class Main
 			System.out.print("> ");
 			Achievement achievement = achievements.get(selectAchievementFromList(achievements)-1);
 			System.out.println("Input the number corresponding to the achievement you wish to restore.");
+			System.out.print("> ");
 			int amountOfMementos = achievement.getHistory();
 			achievement.restore(amountOfMementos-scanner.nextInt());
+			System.out.println("Achievement restored.");
 		}
 		else
 		{
@@ -190,8 +209,9 @@ public class Main
 		{
 			System.out.println("Available Commands (case insensitive)");
 		}
-		System.out.println("NewAchievement -> Creates a new Achievement.");
+		System.out.println("NewAchievement -> Creates a new achievement.");
 		System.out.println("EditAchievement -> Edits an existing achievement.");
+		System.out.println("UpdateAchievement -> Update your progress on an achievement.");
 		System.out.println("SaveAchievement -> Saves an achievement as a JSON file.");
 		System.out.println("RestoreAchievement -> Restores an achievement.");
 		System.out.println("Help -> Displays this dialog.");

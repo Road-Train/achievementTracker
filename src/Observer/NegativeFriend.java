@@ -20,15 +20,14 @@ public class NegativeFriend extends FriendUser
 		this.email = email;
 	}
 	
-	public String update(String context)
+	public String update(Context context)
 	{
 		return switch (context)
 		{
-			case "New" -> "Completed this achievement last year lol";
-			case "Edit" -> "Don't care";
-			case "Progress" -> "You can do better than this right?";
-			case "Completed" -> "I completed this way faster than you...";
-			default -> null;
+			case NEW -> "Completed this achievement last year lol";
+			case EDIT -> "Don't care";
+			case PROGRESS -> "You can do better than this right?";
+			case COMPLETED -> "I completed this way faster than you...";
 		};
 	}
 }

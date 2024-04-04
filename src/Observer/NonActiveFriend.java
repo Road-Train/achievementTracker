@@ -15,7 +15,7 @@ public class NonActiveFriend extends FriendUser
 		this.responseNumber = random.nextInt(max - min + 1) + min;
 	}
 	
-	public String update(String context)
+	public String update(Context context)
 	{
 		Random random = new Random();
 		int max = 10;
@@ -26,11 +26,10 @@ public class NonActiveFriend extends FriendUser
 		{
 			return switch (context)
 			{
-				case "New" -> "Nice, you finally started that achievement!";
-				case "Edit" -> "Good luck";
-				case "Progress" -> "Nice job!";
-				case "Completed" ->  "Super fast!";
-				default -> null;
+				case NEW -> "Nice, you finally started that achievement!";
+				case EDIT -> "Good luck";
+				case PROGRESS -> "Nice job!";
+				case COMPLETED ->  "Super fast!";
 			};
 		}
 		return null;

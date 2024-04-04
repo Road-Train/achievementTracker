@@ -7,15 +7,14 @@ public class PositiveFriend extends FriendUser
 		super(name);
 	}
 	
-	public String update(String context)
+	public String update(Context context)
 	{
 		return switch (context)
 		{
-			case "New" -> "Nice, you finally started that achievement!";
-			case "Edit" -> "Good luck";
-			case "Progress" -> "Nice job! Have fun with this game!";
-			case "Completed" -> "Super fast! Proud of you!";
-			default -> null;
+			case NEW -> "Nice, you finally started that achievement!";
+			case EDIT -> "Good luck";
+			case PROGRESS -> "Nice job! Have fun with this game!";
+			case COMPLETED -> "Super fast! Proud of you!";
 		};
 	}
 	
