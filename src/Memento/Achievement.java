@@ -13,7 +13,7 @@ public class Achievement
 	private String description;
 	private int progress = 0;
 	private int totalProgress;
-	private LocalDateTime dateAchieved;
+	private LocalDateTime dateAchieved = null;
 	private static final Caretaker caretaker = new Caretaker();
 	
 	private Achievement(Memento memento)
@@ -27,7 +27,6 @@ public class Achievement
 		this.title = title;
 		this.description = description;
 		this.totalProgress = totalProgress;
-		this.dateAchieved = LocalDateTime.now();
 	}
 	public static Achievement importAchievement()
 	{
@@ -37,13 +36,13 @@ public class Achievement
 	public String save()
 	{
 		caretaker.addMemento(new Memento(this.game, this.title, this.description, this.totalProgress, this.progress, this.dateAchieved));
-		return STR."Achievement saved at: \{LocalDateTime.now()}";
+		return "Achievement saved at: " + LocalDateTime.now();
 	}
 	
 	public int getHistory()
 	{
 		LinkedList<Memento> history = caretaker.fetchHistory();
-		IntStream.range(0, history.size()).mapToObj(i -> STR."\{i + 1}: \{history.get(i).getState()}").forEach(System.out::println);
+		IntStream.range(0, history.size()).mapToObj(i -> i + 1+": " + history.get(i).getState()).forEach(System.out::println);
 		return history.size();
 	}
 	
@@ -74,12 +73,12 @@ public class Achievement
 	
 	public String getSimpleInfo()
 	{
-		return STR."\{title} - (\{game})";
+		return title +" - "+ game;
 	}
 	
 	public String getinfo()
 	{
-		return STR."Title: \{title}\nGame: \{game}\nDescription: \{description}\nProgress: \{progress}/\{totalProgress}";
+		return "Title: "+title+"\nGame: "+game+"\nDescription: "+description+"\nProgress: "+progress+"/"+totalProgress;
 	}
 	
 	public String getDescription()
@@ -165,17 +164,17 @@ public class Achievement
 		
 		String getState()
 		{
-			String output = STR."\{dateCreated} - \{description} - \{progress}/\{totalProgress}";
+			String output = dateCreated+" - "+description+" - "+progress+"/"+totalProgress;
 			if(dateAchieved!=null)
 			{
-				output+= STR." - \{dateAchieved}";
+				output+= " - "+dateAchieved;
 			}
 			return output;
 		}
 		
 		String getFilePath()
 		{
-			return STR."\{game}\{dateCreated.toString().replace(":", "-")}";
+			return game+dateCreated.toString().replace(":", "-");
 		}
 		
 		private void serialize()

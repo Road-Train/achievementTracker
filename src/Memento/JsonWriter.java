@@ -9,12 +9,12 @@ public class JsonWriter
 {
 	static void writeMementoToJson(Achievement.Memento memento)
 	{
-		Path filePath = Paths.get(STR."\{locationPicker().getPath()}\\\{memento.getFilePath()}.json"); // Define the file path
+		Path filePath = Paths.get(locationPicker().getPath()+"\\"+memento.getFilePath()+".json"); // Define the file path
 		try (FileOutputStream fileOut = new FileOutputStream(filePath.toFile()); ObjectOutputStream objectOut = new ObjectOutputStream(fileOut))
 		{
 			objectOut.writeObject(memento);
 			System.out.println("Memento object written to file successfully at:");
-			System.out.println(STR."File path: \{filePath.toAbsolutePath()}");
+			System.out.println("File path: "+filePath.toAbsolutePath());
 		}
 		catch (Exception ex)
 		{

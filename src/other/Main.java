@@ -64,7 +64,7 @@ public class Main
 				case 1 -> positiveFriendUserFactory.createFriendUser(name);
 				case 2 -> negativeFriendUserFactory.createFriendUser(name);
 				case 3 -> nonActiveFriendUserFactory.createFriendUser(name);
-				default -> throw new IllegalStateException(STR."Unexpected value: \{number}");
+				default -> throw new IllegalStateException("Unexpected value: "+number);
 			};
 			user.addFriend(friend);
 		}
@@ -127,7 +127,7 @@ public class Main
 				if(madeEdit)
 				{
 					System.out.println("Preview:");
-					System.out.println(STR."Title: \{newTitle}\nGame: \{newGame}\nDescription: \{newDescription}\nProgress: \{achievementToEdit.getProgress()}/\{newTotalProgress}");
+					System.out.println("Title: "+newTitle+"\nGame: "+newGame+"\nDescription: "+newDescription+"\nProgress: "+achievementToEdit.getProgress()+"/"+newTotalProgress);
 				}
 				madeEdit = false;
 				System.out.println("> ");
@@ -177,7 +177,7 @@ public class Main
 	
 	private static int selectAchievementFromList(List<Achievement> achievements)
 	{
-		IntStream.range(0, achievements.size()).mapToObj(i -> STR."\{i + 1}: \{achievements.get(i).getSimpleInfo()}").forEach(System.out::println);
+		IntStream.range(0, achievements.size()).mapToObj(i -> i + 1+": "+achievements.get(i).getSimpleInfo()).forEach(System.out::println);
 		System.out.print("> ");
 		int index = -1;
 		while (index<0||index> achievements.size())
@@ -257,7 +257,7 @@ public class Main
 	{
 		for(FriendUser friend : user.getFriendList())
 		{
-			System.out.println(STR."\{friend.getName()}(\{friend.getClass().getSimpleName()})");
+			System.out.println(friend.getName()+"("+friend.getClass().getSimpleName()+")");
 		}
 	}
 }
