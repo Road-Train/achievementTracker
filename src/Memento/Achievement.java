@@ -1,5 +1,7 @@
 package Memento;
 
+import Observer.Context;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -8,13 +10,13 @@ import java.util.stream.IntStream;
 public class Achievement
 {
 	
+	private static final Caretaker caretaker = new Caretaker();
 	private String game;
 	private String title;
 	private String description;
 	private int progress = 0;
 	private int totalProgress;
 	private LocalDateTime dateAchieved = null;
-	private static final Caretaker caretaker = new Caretaker();
 	
 	private Achievement(Memento memento)
 	{
@@ -28,6 +30,7 @@ public class Achievement
 		this.description = description;
 		this.totalProgress = totalProgress;
 	}
+	
 	public static Achievement importAchievement()
 	{
 		return new Achievement(Memento.deserialize());
@@ -42,7 +45,7 @@ public class Achievement
 	public int getHistory()
 	{
 		LinkedList<Memento> history = caretaker.fetchHistory();
-		IntStream.range(0, history.size()).mapToObj(i -> i + 1+": " + history.get(i).getState()).forEach(System.out::println);
+		IntStream.range(0, history.size()).mapToObj(i -> i + 1 + ": " + history.get(i).getState()).forEach(System.out::println);
 		return history.size();
 	}
 	
@@ -61,6 +64,7 @@ public class Achievement
 		Memento memento = caretaker.getMementoAtIndex(index);
 		restore(memento);
 	}
+	
 	private void restore(Memento memento)
 	{
 		this.game = memento.game;
@@ -73,12 +77,12 @@ public class Achievement
 	
 	public String getSimpleInfo()
 	{
-		return title +" - "+ game;
+		return title + " - " + game;
 	}
 	
 	public String getinfo()
 	{
-		return "Title: "+title+"\nGame: "+game+"\nDescription: "+description+"\nProgress: "+progress+"/"+totalProgress;
+		return "Title: " + title + "\nGame: " + game + "\nDescription: " + description + "\nProgress: " + progress + "/" + totalProgress;
 	}
 	
 	public String getDescription()
@@ -96,9 +100,36 @@ public class Achievement
 		return this.progress;
 	}
 	
-	public void setProgress(int progress)
+	public Context setProgress(int progress)
 	{
+		
+		int newProgress = 0;
+		double percentProgress = (double) 100 / totalProgress * this.progress;
+		
+		if (progress == 0)
+		{
+			newProgress = this.progress;
+		}
+		else if (progress > this.progress)
+		{
+			newProgress = progress;
+		}
+		
+		double percentProgressNew = (double) 100 / totalProgress * newProgress;
 		this.progress = progress;
+		if (percentProgressNew > percentProgress && percentProgressNew < totalProgress)
+		{
+			return Context.PROGRESS;
+		}
+		else if (percentProgressNew > percentProgress && percentProgressNew == totalProgress)
+		{
+			this.setDateAchieved(LocalDateTime.now());
+			return Context.COMPLETED;
+		}
+		else
+		{
+			return Context.EDIT;
+		}
 	}
 	
 	public int getTotalProgress()
@@ -110,7 +141,7 @@ public class Achievement
 	{
 		
 		this.totalProgress = totalProgress;
-		if(totalProgress<progress)
+		if (totalProgress < progress)
 		{
 			progress = totalProgress;
 			System.out.println("New total Progress is lower than achieved progress: Progress set to total Progress.");
@@ -141,7 +172,7 @@ public class Achievement
 	
 	public void serialize()
 	{
-		caretaker.getMementoAtIndex(caretaker.fetchHistory().size()-1).serialize();
+		caretaker.getMementoAtIndex(caretaker.fetchHistory().size() - 1).serialize();
 	}
 	
 	static class Memento implements Serializable
@@ -166,28 +197,29 @@ public class Achievement
 			this.dateAchieved = dateAchieved;
 		}
 		
+		private static Memento deserialize()
+		{
+			return JsonReader.readMementoFromJson();
+		}
+		
 		String getState()
 		{
-			String output = dateCreated+" - "+description+" - "+progress+"/"+totalProgress;
-			if(dateAchieved!=null)
+			String output = dateCreated + " - " + description + " - " + progress + "/" + totalProgress;
+			if (dateAchieved != null)
 			{
-				output+= " - "+dateAchieved;
+				output += " - " + dateAchieved;
 			}
 			return output;
 		}
 		
 		String getFilePath()
 		{
-			return game+dateCreated.toString().replace(":", "-");
+			return game + dateCreated.toString().replace(":", "-");
 		}
 		
 		private void serialize()
 		{
 			JsonWriter.writeMementoToJson(this);
-		}
-		private static Memento deserialize()
-		{
-			return JsonReader.readMementoFromJson();
 		}
 	}
 }

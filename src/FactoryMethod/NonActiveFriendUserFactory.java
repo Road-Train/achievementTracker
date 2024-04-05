@@ -1,6 +1,7 @@
 package FactoryMethod;
 
-import Observer.*;
+import Observer.FriendUser;
+import Observer.NonActiveFriend;
 
 public class NonActiveFriendUserFactory extends FriendUserFactory
 {

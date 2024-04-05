@@ -38,7 +38,7 @@ public class User
 	// FactoryMethod
 	public void addAchievement(String game, String title, String description, int progress)
 	{
-		this.achievementList.add(new Achievement(game,title,description,progress));
+		this.achievementList.add(new Achievement(game, title, description, progress));
 		notifyFriends(Context.NEW);
 	}
 	
@@ -70,54 +70,29 @@ public class User
 		{
 			for (FriendUser friendUser : this.friendList)
 			{
-				if(friendUser.update(context)!=null)
+				if (friendUser.update(context) != null)
 				{
-					System.out.println(friendUser.getName()+" said: "+friendUser.update(context));
+					System.out.println(friendUser.getName() + " said: " + friendUser.update(context));
 				}
 			}
 		}
 	}
-	public void editAchievement(Achievement achievement,String newGame, String newTitle, String newDescription, int newTotalProgress)
+	
+	public void editAchievement(Achievement achievement, String newGame, String newTitle, String newDescription, int newTotalProgress)
 	{
 		achievement.setGame(newGame);
 		achievement.setTitle(newTitle);
 		achievement.setDescription(newDescription);
 		notifyFriends(Context.EDIT);
-		if(achievement.setTotalProgress(newTotalProgress))
+		if (achievement.setTotalProgress(newTotalProgress))
 		{
 			notifyFriends(Context.COMPLETED);
 		}
 	}
+	
 	public void updateProgress(Achievement achievement, int progress)
 	{
-		int progressAchievement = achievement.getProgress();
-		int totalProgress = achievement.getTotalProgress();
-		int newProgress = 0;
-		double percentProgress = (double) 100 / totalProgress * progressAchievement;
-		
-		if (progress == 0)
-		{
-			newProgress = progressAchievement;
-		}
-		else if (progress > progressAchievement)
-		{
-			newProgress = progress;
-		}
-		
-		double percentProgressNew = (double) 100 / totalProgress * newProgress;
-		
-		if (percentProgressNew > percentProgress && percentProgressNew < totalProgress)
-		{
-			notifyFriends(Context.PROGRESS);
-		}
-		else if (percentProgressNew > percentProgress && percentProgressNew == totalProgress)
-		{
-			notifyFriends(Context.COMPLETED);
-		}
-		else
-		{
-			notifyFriends(Context.EDIT);
-		}
+		notifyFriends(achievement.setProgress(progress));
 	}
 	
 	public void saveAchievement(Achievement achievementToSave)

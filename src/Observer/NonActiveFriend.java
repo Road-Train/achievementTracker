@@ -29,7 +29,7 @@ public class NonActiveFriend extends FriendUser
 				case NEW -> "Nice, you finally started that achievement!";
 				case EDIT -> "Good luck";
 				case PROGRESS -> "Nice job!";
-				case COMPLETED ->  "Super fast!";
+				case COMPLETED -> "Super fast!";
 			};
 		}
 		else

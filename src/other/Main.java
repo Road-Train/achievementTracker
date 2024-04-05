@@ -1,7 +1,9 @@
 package other;
 
-import FactoryMethod.*;
-import Memento.*;
+import FactoryMethod.NegativeFriendUserFactory;
+import FactoryMethod.NonActiveFriendUserFactory;
+import FactoryMethod.PositiveFriendUserFactory;
+import Memento.Achievement;
 import Observer.FriendUser;
 
 import java.util.LinkedList;
@@ -47,6 +49,7 @@ public class Main
 		} while (!command.equalsIgnoreCase("exit"));
 		System.exit(0);
 	}
+	
 	private static void initialize()
 	{
 		LinkedList<String> names = new LinkedList<>();
@@ -57,27 +60,28 @@ public class Main
 		names.add("Henk");
 		names.add("Jan");
 		names.add("Klaas");
-		for(String name : names)
+		for (String name : names)
 		{
 			Random rng = new Random();
-			int number = rng.nextInt(3)+1;
+			int number = rng.nextInt(3) + 1;
 			FriendUser friend = switch (number)
 			{
 				case 1 -> positiveFriendUserFactory.createFriendUser(name);
 				case 2 -> negativeFriendUserFactory.createFriendUser(name);
 				case 3 -> nonActiveFriendUserFactory.createFriendUser(name);
-				default -> throw new IllegalStateException("Unexpected value: "+number);
+				default -> throw new IllegalStateException("Unexpected value: " + number);
 			};
 			user.addFriend(friend);
 		}
 	}
+	
 	private static void updateAchievement()
 	{
 		LinkedList<Achievement> achievements = user.getAchievementList();
-		if(!(achievements.isEmpty()))
+		if (!(achievements.isEmpty()))
 		{
 			System.out.println("Input the number of the achievement you wish to update:");
-			Achievement achievement = achievements.get(selectAchievementFromList(achievements)-1);
+			Achievement achievement = achievements.get(selectAchievementFromList(achievements) - 1);
 			System.out.println("Please specify how much progress has been made towards completion.");
 			System.out.print("> ");
 			int progress = scanner.nextInt();
@@ -105,7 +109,7 @@ public class Main
 		System.out.println("Please enter the achievement's total Progress:");
 		System.out.print("> ");
 		int progress = scanner.nextInt();
-		user.addAchievement(game,title, description, progress);
+		user.addAchievement(game, title, description, progress);
 		System.out.println("Achievement created succesfully!");
 		scanner.nextLine();
 	}
@@ -113,10 +117,10 @@ public class Main
 	private static void editAchievement()
 	{
 		List<Achievement> achievements = user.getAchievementList();
-		if(!achievements.isEmpty())
+		if (!achievements.isEmpty())
 		{
 			System.out.println("Input the number of the achievement you wish to edit:");
-			Achievement achievementToEdit = achievements.get(selectAchievementFromList(achievements)-1);
+			Achievement achievementToEdit = achievements.get(selectAchievementFromList(achievements) - 1);
 			System.out.println(achievementToEdit.getinfo());
 			System.out.println("Please input the name of the item you wish to edit, to edit total progress use 'totalProgress'. Enter 'done' to finish.");
 			String newGame = achievementToEdit.getGame();
@@ -126,10 +130,10 @@ public class Main
 			boolean madeEdit = false;
 			while (!(scanner.nextLine().equalsIgnoreCase("done")))
 			{
-				if(madeEdit)
+				if (madeEdit)
 				{
 					System.out.println("Preview:");
-					System.out.println("Title: "+newTitle+"\nGame: "+newGame+"\nDescription: "+newDescription+"\nProgress: "+achievementToEdit.getProgress()+"/"+newTotalProgress);
+					System.out.println("Title: " + newTitle + "\nGame: " + newGame + "\nDescription: " + newDescription + "\nProgress: " + achievementToEdit.getProgress() + "/" + newTotalProgress);
 				}
 				madeEdit = false;
 				System.out.println("> ");
@@ -156,10 +160,10 @@ public class Main
 					case "totalprogress":
 						System.out.println("Please input the new total Progress required for completion.");
 						newTotalProgress = scanner.nextInt();
-						if(newTotalProgress<0)
+						if (newTotalProgress < 0)
 						{
 							System.out.println("Negative input detected: Converting to positive.");
-							newTotalProgress*=-1;
+							newTotalProgress *= -1;
 						}
 					case "done":
 						break;
@@ -167,7 +171,7 @@ public class Main
 						System.out.println("Invalid input detected.");
 				}
 			}
-			user.editAchievement(achievementToEdit,newGame,newTitle,newDescription,newTotalProgress);
+			user.editAchievement(achievementToEdit, newGame, newTitle, newDescription, newTotalProgress);
 			System.out.println("Achievement edited succesfully!");
 		}
 		else
@@ -179,14 +183,17 @@ public class Main
 	
 	private static int selectAchievementFromList(List<Achievement> achievements)
 	{
-		IntStream.range(0, achievements.size()).mapToObj(i -> i + 1+": "+achievements.get(i).getSimpleInfo()).forEach(System.out::println);
+		IntStream.range(0, achievements.size()).mapToObj(i -> i + 1 + ": " + achievements.get(i).getSimpleInfo()).forEach(System.out::println);
 		System.out.print("> ");
 		int index = -1;
-		while (index<0||index> achievements.size())
+		while (index < 0 || index > achievements.size())
 		{
-			if (scanner.hasNextInt()) {
+			if (scanner.hasNextInt())
+			{
 				index = scanner.nextInt();
-			} else {
+			}
+			else
+			{
 				System.out.println("Invalid input. Please enter a valid integer.");
 				scanner.next(); // Consume the invalid input
 			}
@@ -198,11 +205,11 @@ public class Main
 	private static void saveAchievement()
 	{
 		List<Achievement> achievements = user.getAchievementList();
-		if(!(achievements.isEmpty()))
+		if (!(achievements.isEmpty()))
 		{
 			System.out.println("Input the number of the achievement you wish to save:");
 			System.out.print("> ");
-			Achievement achievement = achievements.get(selectAchievementFromList(achievements)-1);
+			Achievement achievement = achievements.get(selectAchievementFromList(achievements) - 1);
 			user.saveAchievement(achievement);
 		}
 		else
@@ -215,17 +222,17 @@ public class Main
 	private static void restoreAchievement()
 	{
 		List<Achievement> achievements = user.getAchievementList();
-		if(!(achievements.isEmpty()))
+		if (!(achievements.isEmpty()))
 		{
 			System.out.println("Input the number of the achievement for which you want to restore:");
 			System.out.print("> ");
-			Achievement achievement = achievements.get(selectAchievementFromList(achievements)-1);
-			if(achievement.getHistory()!=0)
+			Achievement achievement = achievements.get(selectAchievementFromList(achievements) - 1);
+			if (achievement.getHistory() != 0)
 			{
 				System.out.println("Input the number corresponding to the achievement you wish to restore.");
 				System.out.print("> ");
 				int amountOfMementos = achievement.getHistory();
-				user.restoreMemento(achievement,amountOfMementos-scanner.nextInt());
+				user.restoreMemento(achievement, amountOfMementos - scanner.nextInt());
 				System.out.println("Achievement restored.");
 			}
 			else
@@ -243,11 +250,11 @@ public class Main
 	private static void exportAchievement()
 	{
 		List<Achievement> achievements = user.getAchievementList();
-		if(!(achievements.isEmpty()))
+		if (!(achievements.isEmpty()))
 		{
 			System.out.println("Input the number of the achievement which you wish to export:");
 			System.out.print("> ");
-			Achievement achievement = achievements.get(selectAchievementFromList(achievements)-1);
+			Achievement achievement = achievements.get(selectAchievementFromList(achievements) - 1);
 			user.saveAchievement(achievement);
 			achievement.serialize();
 		}
@@ -257,6 +264,7 @@ public class Main
 		}
 		scanner.nextLine();
 	}
+	
 	private static void importAchievement()
 	{
 		user.importAchievement();
@@ -279,11 +287,12 @@ public class Main
 		System.out.println("Help -> Displays this dialog.");
 		System.out.println("Exit -> Terminates the program. Changes will not be saved.");
 	}
+	
 	private static void showFriends()
 	{
-		for(FriendUser friend : user.getFriendList())
+		for (FriendUser friend : user.getFriendList())
 		{
-			System.out.println(friend.getName()+"("+friend.getClass().getSimpleName()+")");
+			System.out.println(friend.getName() + "(" + friend.getClass().getSimpleName() + ")");
 		}
 	}
 }
