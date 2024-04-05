@@ -36,6 +36,8 @@ public class Main
 				case "editachievement" -> editAchievement();
 				case "saveachievement" -> saveAchievement();
 				case "restoreachievement" -> restoreAchievement();
+				case "importachievement" -> importAchievement();
+				case "exportachievement" -> exportAchievement();
 				case "updateachievement" -> updateAchievement();
 				case "viewfriends" -> showFriends();
 				case "help" -> displayCommands(true);
@@ -238,6 +240,28 @@ public class Main
 		scanner.nextLine();
 	}
 	
+	private static void exportAchievement()
+	{
+		List<Achievement> achievements = user.getAchievementList();
+		if(!(achievements.isEmpty()))
+		{
+			System.out.println("Input the number of the achievement which you wish to export:");
+			System.out.print("> ");
+			Achievement achievement = achievements.get(selectAchievementFromList(achievements)-1);
+			user.saveAchievement(achievement);
+			achievement.serialize();
+		}
+		else
+		{
+			System.out.println("No achievements detected!");
+		}
+		scanner.nextLine();
+	}
+	private static void importAchievement()
+	{
+		user.importAchievement();
+	}
+	
 	private static void displayCommands(boolean includeFirstLine)
 	{
 		if (includeFirstLine)
@@ -247,8 +271,10 @@ public class Main
 		System.out.println("NewAchievement -> Creates a new achievement.");
 		System.out.println("EditAchievement -> Edits an existing achievement.");
 		System.out.println("UpdateAchievement -> Update your progress on an achievement.");
-		System.out.println("SaveAchievement -> Saves an achievement as a JSON file.");
+		System.out.println("SaveAchievement -> Saves an achievement.");
 		System.out.println("RestoreAchievement -> Restores an achievement.");
+		System.out.println("ImportAchievement -> Imports a previously exported achievement.");
+		System.out.println("ExportAchievement -> Exports the achievement as a JSON file.");
 		System.out.println("ViewFriends -> Shows you your friend list.");
 		System.out.println("Help -> Displays this dialog.");
 		System.out.println("Exit -> Terminates the program. Changes will not be saved.");

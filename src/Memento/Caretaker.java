@@ -1,7 +1,5 @@
 package Memento;
 
-import Memento.Achievement;
-
 import java.util.LinkedList;
 
 public class Caretaker
@@ -15,7 +13,7 @@ public class Caretaker
 	{
 		this.history = new LinkedList<>();
 	}
-	Achievement.Memento undo(int index)
+	Achievement.Memento getMementoAtIndex(int index)
 	{
 		return history.get(index);
 	}

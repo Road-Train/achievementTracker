@@ -58,7 +58,7 @@ public class Achievement
 	
 	public void restore(int index)
 	{
-		Memento memento = caretaker.undo(index);
+		Memento memento = caretaker.getMementoAtIndex(index);
 		restore(memento);
 	}
 	private void restore(Memento memento)
@@ -139,6 +139,10 @@ public class Achievement
 		this.title = title;
 	}
 	
+	public void serialize()
+	{
+		caretaker.getMementoAtIndex(caretaker.fetchHistory().size()-1).serialize();
+	}
 	
 	static class Memento implements Serializable
 	{
