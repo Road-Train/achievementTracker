@@ -398,6 +398,7 @@ public class Main
 	private static void importAchievement()
 	{
 		user.importAchievement();
+		System.out.println("Memento has been imported (when selected)");
 	}
 	
 	private static void displayCommands(boolean includeFirstLine)

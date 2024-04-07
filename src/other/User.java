@@ -106,6 +106,9 @@ public class User
 	public void importAchievement()
 	{
 		Achievement achievement = Achievement.importAchievement();
-		achievementList.add(achievement);
+		if(achievement != null)
+		{
+			achievementList.add(achievement);
+		}
 	}
 }
