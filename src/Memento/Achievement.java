@@ -175,7 +175,7 @@ public class Achievement
 		caretaker.getMementoAtIndex(caretaker.fetchHistory().size() - 1).serialize();
 	}
 	
-	public static class Memento implements Serializable
+	static class Memento implements Serializable
 	{
 		
 		private final String game;
@@ -186,7 +186,7 @@ public class Achievement
 		private final LocalDateTime dateAchieved;
 		private final LocalDateTime dateCreated;
 		
-		public Memento(String game, String title, String description, int totalProgress, int progress, LocalDateTime dateAchieved)
+		private Memento(String game, String title, String description, int totalProgress, int progress, LocalDateTime dateAchieved)
 		{
 			this.game = game;
 			this.title = title;
@@ -199,8 +199,6 @@ public class Achievement
 		
 		private static Memento deserialize()
 		{
-			JsonReader jsonReader = new JsonReader();
-
 			return JsonReader.readMementoFromJson();
 		}
 		
@@ -221,37 +219,7 @@ public class Achievement
 		
 		private void serialize()
 		{
-			JsonWriter jsonWriter = new JsonWriter();
-
 			JsonWriter.writeMementoToJson(this);
-		}
-
-		public String getGame() {
-			return game;
-		}
-
-		public String getTitle() {
-			return title;
-		}
-
-		public String getDescription() {
-			return description;
-		}
-
-		public int getProgress() {
-			return progress;
-		}
-
-		public int getTotalProgress() {
-			return totalProgress;
-		}
-
-		public LocalDateTime getDateAchieved() {
-			return dateAchieved;
-		}
-
-		public LocalDateTime getDateCreated() {
-			return dateCreated;
 		}
 	}
 }
