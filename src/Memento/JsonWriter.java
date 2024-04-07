@@ -1,6 +1,4 @@
-package other;
-
-import Memento.Achievement;
+package Memento;
 
 import javax.swing.*;
 import java.io.File;

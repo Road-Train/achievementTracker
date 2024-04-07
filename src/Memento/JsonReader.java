@@ -1,6 +1,5 @@
-package other;
+package Memento;
 
-import Memento.Achievement;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

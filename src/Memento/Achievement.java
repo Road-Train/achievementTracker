@@ -1,8 +1,6 @@
 package Memento;
 
 import Observer.Context;
-import other.JsonReader;
-import other.JsonWriter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
