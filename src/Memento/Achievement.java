@@ -80,7 +80,7 @@ public class Achievement
 		return title + " - " + game;
 	}
 	
-	public String getinfo()
+	public String getInfo()
 	{
 		return "Title: " + title + "\nGame: " + game + "\nDescription: " + description + "\nProgress: " + progress + "/" + totalProgress;
 	}

@@ -7,7 +7,6 @@ import Memento.Achievement;
 import Observer.FriendUser;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.IntStream;
@@ -35,6 +34,8 @@ public class Main
 			switch (command.toLowerCase())
 			{
 				case "newachievement" -> createAchievement();
+				case "removeachievement" -> removeAchievement();
+				case "viewachievements" -> showAchievements(true);
 				case "editachievement" -> editAchievement();
 				case "saveachievement" -> saveAchievement();
 				case "restoreachievement" -> restoreAchievement();
@@ -42,6 +43,8 @@ public class Main
 				case "exportachievement" -> exportAchievement();
 				case "updateachievement" -> updateAchievement();
 				case "viewfriends" -> showFriends();
+				case "addfriend" -> addFriend();
+				case "removefriend" -> removeFriend();
 				case "help" -> displayCommands(true);
 				case "exit" -> System.out.println("Exiting program.");
 				default -> System.out.println("Unrecognized command. Use 'help' for all available commands.");
@@ -75,13 +78,99 @@ public class Main
 		}
 	}
 	
+	private static void addFriend()
+	{
+		System.out.println("Note: As of right now all friends are simulated and not real. We apologize for the inconvenience.");
+		System.out.println("Please enter the friend's name:");
+		System.out.print("> ");
+		String name = scanner.nextLine();
+		System.out.println("Input the friend's desired attitude. 1 for positive, 2 for negative, 3 for nonactive");
+		FriendUser friend = null;
+		while (friend == null)
+		{
+			System.out.print("> ");
+			try
+			{
+				friend = switch (scanner.nextInt())
+				{
+					case 1 -> positiveFriendUserFactory.createFriendUser(name);
+					case 2 -> negativeFriendUserFactory.createFriendUser(name);
+					case 3 -> nonActiveFriendUserFactory.createFriendUser(name);
+					default -> throw new IllegalStateException("Unexpected value: " + scanner.nextInt());
+				};
+			}
+			catch (IllegalStateException e)
+			{
+				System.out.println(e.getMessage());
+			}
+		}
+		user.addFriend(friend);
+	}
+	
+	private static void removeFriend()
+	{
+		LinkedList<FriendUser> friends = user.getFriendList();
+		if (friends.isEmpty())
+		{
+			System.out.println("Input the number of the friend you wish to remove:");
+			showFriends();
+			System.out.print("> ");
+			FriendUser friend = friends.get(selectItemFromList(friends) - 1);
+			user.removeFriend(friend);
+		}
+		else
+		{
+			System.out.println("No friends detected!");
+		}
+	}
+	
+	private static void removeAchievement()
+	{
+		LinkedList<Achievement> achievements = user.getAchievementList();
+		if (achievements.isEmpty())
+		{
+			System.out.println("Input the number of the friend you wish to remove:");
+			showAchievements();
+			System.out.print("> ");
+			Achievement achievement = achievements.get(selectItemFromList(achievements) - 1);
+			System.out.println("Do you want to export this achievement before deleting?");
+			String input = null;
+			while(input == null)
+			{
+				try
+				{
+					input = switch (scanner.nextLine().toLowerCase())
+					{
+						case "yes" -> "yes";
+						case "no" -> "no";
+						default -> throw new IllegalStateException("Unexpected value: " + scanner.nextLine());
+					};
+				}
+				catch (IllegalStateException e)
+				{
+					System.out.println(e.getMessage());
+				}
+			}
+			if(input.equalsIgnoreCase("yes"))
+			{
+				achievement.serialize();
+			}
+			user.removeAchievement(achievement);
+		}
+		else
+		{
+			System.out.println("No friends detected!");
+		}
+	}
+	
 	private static void updateAchievement()
 	{
 		LinkedList<Achievement> achievements = user.getAchievementList();
 		if (!(achievements.isEmpty()))
 		{
 			System.out.println("Input the number of the achievement you wish to update:");
-			Achievement achievement = achievements.get(selectAchievementFromList(achievements) - 1);
+			showAchievements();
+			Achievement achievement = achievements.get(selectItemFromList(achievements) - 1);
 			System.out.println("Please specify how much progress has been made towards completion.");
 			System.out.print("> ");
 			int progress = scanner.nextInt();
@@ -116,12 +205,13 @@ public class Main
 	
 	private static void editAchievement()
 	{
-		List<Achievement> achievements = user.getAchievementList();
+		LinkedList<Achievement> achievements = user.getAchievementList();
 		if (!achievements.isEmpty())
 		{
 			System.out.println("Input the number of the achievement you wish to edit:");
-			Achievement achievementToEdit = achievements.get(selectAchievementFromList(achievements) - 1);
-			System.out.println(achievementToEdit.getinfo());
+			showAchievements();
+			Achievement achievementToEdit = achievements.get(selectItemFromList(achievements) - 1);
+			System.out.println(achievementToEdit.getInfo());
 			System.out.println("Please input the name of the item you wish to edit, to edit total progress use 'totalProgress'. Enter 'done' to finish.");
 			String newGame = achievementToEdit.getGame();
 			String newTitle = achievementToEdit.getTitle();
@@ -181,12 +271,30 @@ public class Main
 		scanner.nextLine();
 	}
 	
-	private static int selectAchievementFromList(List<Achievement> achievements)
+	private static void showAchievements()
 	{
-		IntStream.range(0, achievements.size()).mapToObj(i -> i + 1 + ": " + achievements.get(i).getSimpleInfo()).forEach(System.out::println);
+		showAchievements(false);
+	}
+	
+	private static void showAchievements(boolean showDetailedInfo)
+	{
+		LinkedList<Achievement> achievements = user.getAchievementList();
+		if (showDetailedInfo)
+		{
+			IntStream.range(0, achievements.size()).mapToObj(i -> i + 1 + ": " + achievements.get(i).getInfo()).forEach(System.out::println);
+		}
+		else
+		{
+			IntStream.range(0, achievements.size()).mapToObj(i -> i + 1 + ": " + achievements.get(i).getSimpleInfo()).forEach(System.out::println);
+		}
+	}
+	
+	private static int selectItemFromList(LinkedList list)
+	{
+		int size = list.size();
 		System.out.print("> ");
 		int index = -1;
-		while (index < 0 || index > achievements.size())
+		while (index < 0 || index > size)
 		{
 			if (scanner.hasNextInt())
 			{
@@ -204,12 +312,13 @@ public class Main
 	
 	private static void saveAchievement()
 	{
-		List<Achievement> achievements = user.getAchievementList();
+		LinkedList<Achievement> achievements = user.getAchievementList();
 		if (!(achievements.isEmpty()))
 		{
 			System.out.println("Input the number of the achievement you wish to save:");
+			showAchievements();
 			System.out.print("> ");
-			Achievement achievement = achievements.get(selectAchievementFromList(achievements) - 1);
+			Achievement achievement = achievements.get(selectItemFromList(achievements) - 1);
 			user.saveAchievement(achievement);
 		}
 		else
@@ -221,12 +330,13 @@ public class Main
 	
 	private static void restoreAchievement()
 	{
-		List<Achievement> achievements = user.getAchievementList();
+		LinkedList<Achievement> achievements = user.getAchievementList();
 		if (!(achievements.isEmpty()))
 		{
 			System.out.println("Input the number of the achievement for which you want to restore:");
+			showAchievements();
 			System.out.print("> ");
-			Achievement achievement = achievements.get(selectAchievementFromList(achievements) - 1);
+			Achievement achievement = achievements.get(selectItemFromList(achievements) - 1);
 			if (achievement.getHistory() != 0)
 			{
 				System.out.println("Input the number corresponding to the achievement you wish to restore.");
@@ -249,12 +359,13 @@ public class Main
 	
 	private static void exportAchievement()
 	{
-		List<Achievement> achievements = user.getAchievementList();
+		LinkedList<Achievement> achievements = user.getAchievementList();
 		if (!(achievements.isEmpty()))
 		{
 			System.out.println("Input the number of the achievement which you wish to export:");
+			showAchievements();
 			System.out.print("> ");
-			Achievement achievement = achievements.get(selectAchievementFromList(achievements) - 1);
+			Achievement achievement = achievements.get(selectItemFromList(achievements) - 1);
 			user.saveAchievement(achievement);
 			achievement.serialize();
 		}
@@ -277,22 +388,24 @@ public class Main
 			System.out.println("Available Commands (case insensitive)");
 		}
 		System.out.println("NewAchievement -> Creates a new achievement.");
+		System.out.println("RemoveAchievement -> Removes an achievement.");
 		System.out.println("EditAchievement -> Edits an existing achievement.");
 		System.out.println("UpdateAchievement -> Update your progress on an achievement.");
 		System.out.println("SaveAchievement -> Saves an achievement.");
 		System.out.println("RestoreAchievement -> Restores an achievement.");
 		System.out.println("ImportAchievement -> Imports a previously exported achievement.");
 		System.out.println("ExportAchievement -> Exports the achievement as a JSON file.");
+		System.out.println("ViewAchievements -> Shows you your achievement list.");
 		System.out.println("ViewFriends -> Shows you your friend list.");
+		System.out.println("AddFriend -> Adds a new friend (debug feature)");
+		System.out.println("RemoveFriend -> Removes a friend.");
 		System.out.println("Help -> Displays this dialog.");
 		System.out.println("Exit -> Terminates the program. Changes will not be saved.");
 	}
 	
 	private static void showFriends()
 	{
-		for (FriendUser friend : user.getFriendList())
-		{
-			System.out.println(friend.getName() + "(" + friend.getClass().getSimpleName() + ")");
-		}
+		LinkedList<FriendUser> friends = user.getFriendList();
+		IntStream.range(0, friends.size()).mapToObj(i -> i + 1 + ": " + friends.get(i).getName() + "(" + friends.get(i).getClass().getSimpleName() + ")").forEach(System.out::println);
 	}
 }

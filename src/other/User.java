@@ -8,15 +8,13 @@ import java.util.LinkedList;
 
 public class User
 {
-	private final LinkedList<Achievement> achievementList;
-	private final LinkedList<FriendUser> friendList;
+	private final LinkedList<Achievement> achievementList = new LinkedList<>();
+	private final LinkedList<FriendUser> friendList= new LinkedList<>();
 	private String name;
 	
 	public User(String name)
 	{
 		this.name = name;
-		this.achievementList = new LinkedList<>();
-		this.friendList = new LinkedList<>();
 	}
 	
 	public String getName()
