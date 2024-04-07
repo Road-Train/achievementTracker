@@ -367,6 +367,7 @@ public class Main
 			System.out.print("> ");
 			Achievement achievement = achievements.get(selectItemFromList(achievements) - 1);
 			user.saveAchievement(achievement);
+			System.out.println("The file picker may be hiding behind the IntelliJ window. Try to minimize it.");
 			achievement.serialize();
 		}
 		else
@@ -378,6 +379,7 @@ public class Main
 	
 	private static void importAchievement()
 	{
+		System.out.println("The file picker may be hiding behind the IntelliJ window. Try to minimize it.");
 		user.importAchievement();
 	}
 	

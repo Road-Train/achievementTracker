@@ -175,7 +175,7 @@ public class Achievement
 		caretaker.getMementoAtIndex(caretaker.fetchHistory().size() - 1).serialize();
 	}
 	
-	static class Memento implements Serializable
+	class Memento implements Serializable
 	{
 		
 		private final String game;

@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 
 public class JsonReader
 {
-	
+	private static final JFileChooser fileChooser = new JFileChooser();
 	static Achievement.Memento readMementoFromJson()
 	{
 		Path filePath = Paths.get(jsonFilePicker().getPath());
@@ -27,7 +27,6 @@ public class JsonReader
 	
 	private static File jsonFilePicker()
 	{
-		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON files only (*.json)", "json");
