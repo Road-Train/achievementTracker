@@ -401,6 +401,7 @@ public class Main
 	{
 		System.out.println("The file picker may be hiding behind the IntelliJ window. Try to minimize it.");
 		user.importAchievement();
+		System.out.println("Memento has been imported (when selected)");
 	}
 	
 	private static void displayCommands(boolean includeFirstLine)

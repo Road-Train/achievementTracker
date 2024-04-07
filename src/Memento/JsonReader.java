@@ -1,42 +1,72 @@
 package Memento;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class JsonReader
 {
 	private static final JFileChooser fileChooser = new JFileChooser();
 	static Achievement.Memento readMementoFromJson()
 	{
-		Path filePath = Paths.get(jsonFilePicker().getPath());
-		try (FileInputStream fileIn = new FileInputStream(filePath.toFile()); ObjectInputStream objectIn = new ObjectInputStream(fileIn))
-		{
-			return (Achievement.Memento) objectIn.readObject();
+		try {
+			JsonNode jsonNode = null;
+			String path = jsonFilePicker().getPath();
+			if (path != null) {
+				jsonNode = readJsonFromFile(path);
+			}
+
+			if(jsonNode == null)
+			{
+				return null;
+			}
+
+			LocalDateTime dateTime = LocalDateTime.parse(jsonNode.get("dateTime").asText());
+			String game = jsonNode.get("game").asText();
+			String description = jsonNode.get("description").asText();
+			int progress = jsonNode.get("progress").asInt();
+			LocalDateTime dateAchieved = LocalDateTime.parse(jsonNode.get("dateAchieved").asText());
+			int totalProgress = jsonNode.get("totalProgress").asInt();
+
+			Achievement.Memento memento = new Achievement.Memento(game,"title",description,totalProgress,progress,dateAchieved);
+
+			return memento;
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			return null;
-		}
+		return null;
 	}
-	
-	private static File jsonFilePicker()
-	{
+
+	public static JsonNode readJsonFromFile(String filePath) throws IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		return objectMapper.readTree(new File(filePath));
+	}
+
+	public static File jsonFilePicker() {
+		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		
+
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON files only (*.json)", "json");
 		fileChooser.setFileFilter(filter);
-		
+
 		fileChooser.showSaveDialog(null);
-		
-		System.out.println(fileChooser.getSelectedFile());
-		
+
+		if (fileChooser.getSelectedFile() != null)
+		{
+			System.out.println(fileChooser.getSelectedFile());
+		}
+		else
+		{
+			return null;
+		}
+
 		return fileChooser.getSelectedFile();
 	}
-	
+
 }
