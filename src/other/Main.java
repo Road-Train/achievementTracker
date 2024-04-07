@@ -22,6 +22,7 @@ public class Main
 	public static void main(String[] args)
 	{
 		initialize();
+		System.out.println("for some functions debug mode should be used (json import/export)");
 		System.out.println("Achievement Tracker 1.0");
 		System.out.println("Please use one of the following commands (case insensitive):");
 		displayCommands(false);
