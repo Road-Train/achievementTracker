@@ -22,6 +22,7 @@ public class Main
 	public static void main(String[] args)
 	{
 		initialize();
+		System.out.println("for some functions debug mode should be used (json import/export)");
 		System.out.println("Achievement Tracker 1.0");
 		System.out.println("Please use one of the following commands (case insensitive):");
 		displayCommands(false);
@@ -33,6 +34,8 @@ public class Main
 			command = scanner.nextLine();
 			switch (command.toLowerCase())
 			{
+				case "changename" -> changeName();
+				case "viewprofile" -> viewProfile();
 				case "newachievement" -> createAchievement();
 				case "removeachievement" -> removeAchievement();
 				case "viewachievements" -> showAchievements(true);
@@ -76,6 +79,23 @@ public class Main
 			};
 			user.addFriend(friend);
 		}
+	}
+
+	private  static void changeName()
+	{
+		System.out.println("Enter your new profile username:");
+		System.out.print("> ");
+		user.setName(scanner.nextLine());
+		System.out.println("username has been updated");
+	}
+
+	private  static void viewProfile()
+	{
+		System.out.println("Your profile:");
+		System.out.println(user.getName());
+		System.out.println("Achievements: " + user.getAchievementList().size());
+		System.out.println("Friends: " + user.getFriendList().size());
+
 	}
 	
 	private static void addFriend()
@@ -389,6 +409,8 @@ public class Main
 		{
 			System.out.println("Available Commands (case insensitive)");
 		}
+		System.out.println("ChangeName -> changes the username");
+		System.out.println("ViewProfile -> views the user their profile");
 		System.out.println("NewAchievement -> Creates a new achievement.");
 		System.out.println("RemoveAchievement -> Removes an achievement.");
 		System.out.println("EditAchievement -> Edits an existing achievement.");
